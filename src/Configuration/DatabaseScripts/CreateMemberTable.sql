@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS member(
     age INTEGER NOT NULL,
     weight REAL NOT NULL,
     gender TEXT NOT NULL,
-    street TEXT NOT NULL,
+    streetName TEXT NOT NULL,
     houseNumber TEXT NOT NULL,
     city TEXT NOT NULL,
     zipCode TEXT NOT NULL,
-    email TEXT NOT NULL,
+    emailAddress TEXT NOT NULL,
     phoneNumber TEXT NOT NULL
 )

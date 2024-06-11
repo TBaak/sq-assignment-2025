@@ -7,7 +7,7 @@ from View.UserInterfaceFlowItem import UserInterfaceFlowItem
 
 class UserInterfaceFlow:
 
-    def __init__(self):
+    def __init__(self) -> object:
         self.screens = []
         self.ranScreens = []
         self.currentScreen = 0

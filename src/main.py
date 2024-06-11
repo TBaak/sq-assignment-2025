@@ -5,11 +5,10 @@ from Configuration.DatabaseSeeder import DatabaseSeeder
 from Controllers.LoginController import LoginController
 from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
-from Repository.Repository import Repository
-from Repository.UserRepository import UserRepository
 from Service.EncryptionService import EncryptionService
-from Service.HashService import HashService
 from Service.IndexService import IndexService
+from Test.CreateAdminTest import CreateAdminTest
+from Test.CreateMemberTest import CreateMemberTest
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 
@@ -36,6 +35,10 @@ def main():
     IndexService.index_database()
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database geïndexeerd ", Color.OKGREEN), 1)
+
+    # CreateMemberTest.run()
+    # CreateAdminTest.run(uname="super_admin", pword="Admin_123?")
+    # exit(0)
 
     lc = LoginController()
     lc.login()

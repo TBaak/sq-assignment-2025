@@ -1,3 +1,4 @@
+from Controllers.MenuController import MenuController
 from Enum.Color import Color
 from Helpers.UserHelper import UserHelper
 from Repository.UserRepository import UserRepository
@@ -40,4 +41,18 @@ class LoginController:
 
         user = UserRepository.find_by_credentials(result["username"], result["password"])
 
-        self.login()
+        if user is None:
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Incorrecte inloggegevens", Color.FAIL)
+            )
+            self.login()
+            return
+
+        UserHelper.set_logged_in_user(user)
+
+        UserInterfaceFlow.quick_run(
+            UserInterfaceAlert(f"Welkom {user.username}", Color.OKGREEN)
+        )
+
+        mc = MenuController()
+        mc.menu()

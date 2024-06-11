@@ -1,14 +1,13 @@
-from typing import Optional
+from Models.BaseClasses.DatabaseModel import DatabaseModel
+from Models.BaseClasses.EncryptableModel import EncryptableModel
+from Models.BaseClasses.SerializeableModel import SerializeableModel
 
-from Models.DatabaseModel import DatabaseModel
-from Models.EncryptableModel import EncryptableModel
 
-
-class User(EncryptableModel, DatabaseModel):
+class User(EncryptableModel, DatabaseModel, SerializeableModel):
 
     ENCRYPTED_FIELDS = ['username', 'password']
 
-    id: Optional[int]
+    id: int
     username: str
     password: bytes
     role: str
