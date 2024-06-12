@@ -5,6 +5,6 @@ class OnlyNumberValidation(Validation):
 
     @staticmethod
     def validate(value: str) -> [bool, str]:
-        if not value.isdigit():
+        if value is not "" and not value.isdigit():
             return [False, "Deze waarde mag alleen cijfers bevatten"]
         return [True, ""]

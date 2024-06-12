@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 class ConsoleLogger(object):
 
     loglevel = 0
@@ -9,14 +12,14 @@ class ConsoleLogger(object):
     @staticmethod
     def v(message: str):
         if ConsoleLogger.loglevel >= 1:
-            print(f"{message}")
+            print(f"[{datetime.now().isoformat()}] {message}")
 
     @staticmethod
     def vv(message: str):
         if ConsoleLogger.loglevel >= 2:
-            print(f"{message}")
+            print(f"[{datetime.now().isoformat()}] {message}")
 
     @staticmethod
     def vvv(message: str):
         if ConsoleLogger.loglevel >= 3:
-            print(f"{message}")
+            print(f"[{datetime.now().isoformat()}] {message}")

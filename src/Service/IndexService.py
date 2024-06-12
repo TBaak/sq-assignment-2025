@@ -1,3 +1,4 @@
+from Debug.ConsoleLogger import ConsoleLogger
 from Enum.IndexDomain import IndexDomain
 from Models.User import User
 from Repository.Repository import Repository
@@ -9,7 +10,13 @@ class IndexService:
 
     @staticmethod
     def index_database():
+        ConsoleLogger.v("Indexing database")
+
+        IndexService.index = None
         IndexService.__index_users()
+
+        ConsoleLogger.v("Database indexed")
+
         pass
 
     @staticmethod
@@ -24,6 +31,9 @@ class IndexService:
 
     @staticmethod
     def __index_users():
+
+        ConsoleLogger.v("Indexing users")
+
         conn = Repository.create_connection()
         cursor = conn.cursor()
 
@@ -36,6 +46,8 @@ class IndexService:
                 user[0],
                 EncryptionService.decrypt(user[1])
             )
+
+        ConsoleLogger.v("Users indexed")
 
     @staticmethod
     def __add_to_index(domain: IndexDomain, database_id: int, value: str):

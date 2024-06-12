@@ -46,7 +46,7 @@ class UserInterfaceFlow:
         return self.memory
 
     @staticmethod
-    def quick_run(screen: UserInterfaceFlowItem, sleep_time: int = 3):
+    def quick_run(screen: UserInterfaceFlowItem, sleep_time: int = 2):
         UserInterfaceFlow.clear()
         screen.render()
         if sleep_time:

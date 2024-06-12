@@ -23,7 +23,7 @@ class DatabaseConfiguration:
     @staticmethod
     def __table_member(db: Connection):
 
-        ConsoleLogger.v("?= Creating member table if not exist")
+        ConsoleLogger.v("Creating member table if not exist")
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(dir_path + '/DatabaseScripts/CreateMemberTable.sql', 'r') as sql_file:
@@ -33,14 +33,14 @@ class DatabaseConfiguration:
         cursor.executescript(sql_script)
         cursor.close()
 
-        ConsoleLogger.v("V= Member table created")
+        ConsoleLogger.v("Member table created")
 
         db.commit()
 
     @staticmethod
     def __table_user(db: Connection):
 
-        ConsoleLogger.v("?= Creating user table if not exist")
+        ConsoleLogger.v("Creating user table if not exist")
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(dir_path + '/DatabaseScripts/CreateUserTable.sql', 'r') as sql_file:
@@ -50,6 +50,6 @@ class DatabaseConfiguration:
         cursor.executescript(sql_script)
         cursor.close()
 
-        ConsoleLogger.v("V= User table created")
+        ConsoleLogger.v("User table created")
 
         db.commit()

@@ -11,21 +11,25 @@ from View.UserInterfaceFlowItem import UserInterfaceFlowItem
 
 class UserInterfacePrompt(UserInterfaceFlowItem):
 
-    def __init__(self, prompt_text: str, memory_key: str, validations=None, is_password: bool = False):
+    def __init__(self, prompt_text: str, memory_key: str = "default", validations=None, is_password: bool = False,
+                 value: str = None):
         if validations is None:
             validations = []
-        self.promptText = prompt_text
+        self.promptText = prompt_text + (f" [{value}]" if (value is not None) else "") + ": "
         self.isPassword = is_password
         self.memoryKey = memory_key
         self.validations = validations
+        self.value = value
 
     def render(self, is_retrying: bool = False):
-        system("title " + self.consoleTitle)
 
         if self.isPassword:
             inp = getpass.getpass(self.promptText)
         else:
             inp = input(self.promptText)
+
+        if inp == "" and self.value is not None:
+            return True, self.value
 
         valid = self.validate(inp)
         return valid, inp

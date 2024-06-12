@@ -12,3 +12,4 @@ class User(EncryptableModel, DatabaseModel, SerializeableModel):
     password: bytes
     role: str
 
+
