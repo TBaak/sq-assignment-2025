@@ -28,7 +28,6 @@ def main():
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[ ] Database initialiseren..."), 0)
 
     DatabaseConfiguration.start()
-    DatabaseSeeder.seed()
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database geïnitialiseerd ", Color.OKGREEN), 0)
 
@@ -38,7 +37,7 @@ def main():
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database geïndexeerd ", Color.OKGREEN), 0)
 
-    # NOTE: Devs run any test from this point
+    # NOTE: Devs run any test and seeds from this point
 
     # CreateMemberTest.run()
     # CreateConsultantTest.run(uname="consultant", pword="admin")

@@ -53,6 +53,11 @@ class UserInterfaceFlow:
             sleep(sleep_time)
 
     @staticmethod
+    def quick_run_till_next(screen: UserInterfaceFlowItem, sleep_time: int = 2):
+        UserInterfaceFlow.clear()
+        screen.render()
+
+    @staticmethod
     def clear():
         # for windows
         if name == 'nt':

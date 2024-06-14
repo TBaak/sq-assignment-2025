@@ -18,8 +18,53 @@ from View.Validations.OnlyLetterValdation import OnlyLetterValidation
 
 class MemberController:
 
-    @Auth.permission_required(Permission.MemberDelete)
+    @Auth.permission_required(Permission.MemberRead)
     def list_members(self):
+
+        UserInterfaceFlow.quick_run_till_next(
+            UserInterfaceAlert("Member overzicht aan het laden...", Color.HEADER)
+        )
+
+        LogRepository.log(LogType.MembersRead)
+
+        members = MemberRepository.find_all()
+
+        rows = map(lambda m: [m.firstName, m.lastName, m.age, m.emailAddress,
+                              m.streetName + " " + m.houseNumber], members)
+        rows = list(rows)
+
+        for index, row in enumerate(rows):
+            row.insert(0, index + 1)
+
+        rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
+
+        rows.insert(0, UserInterfaceTableRow(
+            ["#", "Voornaam", "Achternaam", "Leeftijd", "E-mailadres", "Adres"]))
+
+        ui = UserInterfaceFlow()
+        ui.add(UserInterfaceAlert("Member overzicht", Color.HEADER))
+        ui.add(UserInterfaceTable(rows=rows, has_header=True))
+        ui.add(UserInterfacePrompt(
+            prompt_text="Geef het nummer om te bekijken of druk op Z om te zoeken of druk op ENTER om terug te gaan",
+            memory_key="action",
+            validations=[NumberValidation()]
+        )
+        )
+        selection = ui.run()
+
+        selected = selection["action"]
+
+        if selected == "":
+            return
+
+        member_index = int(selected) - 1
+
+        self.show_member(members[member_index])
+
+        return self.list_members()
+
+    @Auth.permission_required(Permission.MemberRead)
+    def search_members(self):
 
         LogRepository.log(LogType.MembersRead)
 
