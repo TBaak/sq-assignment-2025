@@ -1,3 +1,4 @@
+from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
 from Enum.LogType import LogType
 from Form.MemberForm import MemberForm
@@ -12,6 +13,7 @@ from View.UserInterfaceFlow import UserInterfaceFlow
 from View.UserInterfacePrompt import UserInterfacePrompt
 from View.UserInterfaceTable import UserInterfaceTable
 from View.UserInterfaceTableRow import UserInterfaceTableRow
+from View.Validations.NoSpecialCharsValidation import NoSpecialCharsValidation
 from View.Validations.NumberValdation import NumberValidation
 from View.Validations.OnlyLetterValdation import OnlyLetterValidation
 
@@ -19,7 +21,7 @@ from View.Validations.OnlyLetterValdation import OnlyLetterValidation
 class MemberController:
 
     @Auth.permission_required(Permission.MemberRead)
-    def list_members(self):
+    def list_members(self, members: list[Member] = None):
 
         UserInterfaceFlow.quick_run_till_next(
             UserInterfaceAlert("Member overzicht aan het laden...", Color.HEADER)
@@ -27,9 +29,10 @@ class MemberController:
 
         LogRepository.log(LogType.MembersRead)
 
-        members = MemberRepository.find_all()
+        if members is None:
+            members = MemberRepository.find_all()
 
-        rows = map(lambda m: [m.firstName, m.lastName, m.age, m.emailAddress,
+        rows = map(lambda m: [m.number, m.firstName, m.lastName, m.age, m.emailAddress,
                               m.streetName + " " + m.houseNumber], members)
         rows = list(rows)
 
@@ -39,15 +42,14 @@ class MemberController:
         rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
 
         rows.insert(0, UserInterfaceTableRow(
-            ["#", "Voornaam", "Achternaam", "Leeftijd", "E-mailadres", "Adres"]))
+            ["#", "Member nummer", "Voornaam", "Achternaam", "Leeftijd", "E-mailadres", "Adres"]))
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert("Member overzicht", Color.HEADER))
+        ui.add(UserInterfaceAlert("Member overzicht" if members is None else "Zoekresultaten", Color.HEADER))
         ui.add(UserInterfaceTable(rows=rows, has_header=True))
         ui.add(UserInterfacePrompt(
             prompt_text="Geef het nummer om te bekijken of druk op Z om te zoeken of druk op ENTER om terug te gaan",
-            memory_key="action",
-            validations=[NumberValidation()]
+            memory_key="action"
         )
         )
         selection = ui.run()
@@ -56,6 +58,16 @@ class MemberController:
 
         if selected == "":
             return
+
+        if selected.upper() == "Z":
+            return self.search_members()
+
+        if selected.isdigit() is False:
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
+                1
+            )
+            return self.list_members()
 
         member_index = int(selected) - 1
 
@@ -68,41 +80,25 @@ class MemberController:
 
         LogRepository.log(LogType.MembersRead)
 
-        members = MemberRepository.find_all()
-
-        rows = map(lambda m: [m.firstName, m.lastName, m.age, m.emailAddress,
-                              m.streetName + " " + m.houseNumber], members)
-        rows = list(rows)
-
-        for index, row in enumerate(rows):
-            row.insert(0, index + 1)
-
-        rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
-
-        rows.insert(0, UserInterfaceTableRow(
-            ["#", "Voornaam", "Achternaam", "Leeftijd", "E-mailadres", "Adres"]))
-
-        ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert("Member overzicht", Color.HEADER))
-        ui.add(UserInterfaceTable(rows=rows, has_header=True))
-        ui.add(UserInterfacePrompt(
-            prompt_text="Geef het nummer om te bekijken of druk op ENTER om terug te gaan",
-            memory_key="action",
-            validations=[NumberValidation()]
+        query_ui = UserInterfaceFlow()
+        query_ui.add(UserInterfacePrompt(
+            prompt_text="Zoeken op naam, leeftijd, e-mailadres, adres of member nummer",
+            memory_key="query",
+            validations=[NoSpecialCharsValidation()]
         )
         )
-        selection = ui.run()
+        query = query_ui.run()['query']
 
-        selected = selection["action"]
+        members = MemberRepository.find_by_query(query)
 
-        if selected == "":
-            return
+        if len(members) == 0:
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Geen resultaten gevonden", Color.FAIL),
+                2
+            )
+            return self.list_members()
 
-        member_index = int(selected) - 1
-
-        self.show_member(members[member_index])
-
-        return self.list_members()
+        return self.list_members(members)
 
     @Auth.permission_required(Permission.MemberRead)
     def show_member(self, member: Member):
@@ -110,7 +106,7 @@ class MemberController:
         LogRepository.log(LogType.MemberRead)
 
         rows = [
-            UserInterfaceTableRow(["ID", member.id]),
+            UserInterfaceTableRow(["Nummer", member.number]),
             UserInterfaceTableRow(["Voornaam", member.firstName]),
             UserInterfaceTableRow(["Achternaam", member.lastName]),
             UserInterfaceTableRow(["Leeftijd", member.age]),
@@ -155,7 +151,7 @@ class MemberController:
     def add_member(self):
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert(text="Member toevoegen", color=Color.OKBLUE))
+        ui.add(UserInterfaceAlert(text="Member toevoegen", color=Color.HEADER))
 
         ui = MemberForm.get_form(ui, None)
 

@@ -10,5 +10,6 @@ CREATE TABLE IF NOT EXISTS member(
     city TEXT NOT NULL,
     zipCode TEXT NOT NULL,
     emailAddress TEXT NOT NULL,
-    phoneNumber TEXT NOT NULL
+    phoneNumber TEXT NOT NULL,
+    number TEXT NOT NULL
 )

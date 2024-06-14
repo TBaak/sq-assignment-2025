@@ -15,8 +15,12 @@ class Member(EncryptableModel, DatabaseModel, SerializeableModel):
         'city',
         'zipCode',
         'emailAddress',
-        'phoneNumber'
+        'phoneNumber',
+        'number',
     ]
+
+    # Member number
+    number: str = None
 
     # Member information
     id: int = None

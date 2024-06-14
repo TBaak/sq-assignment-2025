@@ -7,10 +7,13 @@ from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
 from Enum.LogType import LogType
 from Models.User import User
+from Repository.BaseClasses.DBRepository import DBRepository
 from Repository.LogRepository import LogRepository
+from Repository.MemberRepository import MemberRepository
 from Service.EncryptionService import EncryptionService
 from Service.IndexService import IndexService
 from Test.CreateConsultantTest import CreateConsultantTest
+from Test.CreateMemberTest import CreateMemberTest
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 
@@ -38,6 +41,8 @@ def main():
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database geïndexeerd ", Color.OKGREEN), 0)
 
     # NOTE: Devs run any test and seeds from this point
+
+    # DatabaseSeeder.members()
 
     # CreateMemberTest.run()
     # CreateConsultantTest.run(uname="consultant", pword="admin")

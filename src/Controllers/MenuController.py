@@ -21,7 +21,7 @@ class MenuController:
     # So if another controller action is finished it will return to this menu.
     def menu(self) -> None:
         menu_ui = UserInterfaceFlow()
-        menu_ui.add(UserInterfaceAlert("Menu", Color.OKCYAN))  # Header
+        menu_ui.add(UserInterfaceAlert("Menu", Color.HEADER))  # Header
 
         rows = list(map(lambda c: [c.name], self.menu_choices))
         rows = UserInterfaceTable.add_row_numbers(rows)
