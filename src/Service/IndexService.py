@@ -1,7 +1,7 @@
 from Debug.ConsoleLogger import ConsoleLogger
 from Enum.IndexDomain import IndexDomain
 from Models.User import User
-from Repository.Repository import Repository
+from Repository.BaseClasses.DBRepository import DBRepository
 from Service.EncryptionService import EncryptionService
 
 
@@ -34,7 +34,7 @@ class IndexService:
 
         ConsoleLogger.v("Indexing users")
 
-        conn = Repository.create_connection()
+        conn = DBRepository.create_connection()
         cursor = conn.cursor()
 
         cursor.execute("SELECT id, username FROM user")

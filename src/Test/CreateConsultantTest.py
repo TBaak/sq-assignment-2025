@@ -4,13 +4,13 @@ from Service.EncryptionService import EncryptionService
 from Service.HashService import HashService
 
 
-class CreateAdminTest:
+class CreateConsultantTest:
 
     @staticmethod
     def run(uname: str, pword: str):
         a = EncryptionService.encrypt(uname)
         b = EncryptionService.encrypt(HashService.hash(pword).decode())
-        c = EncryptionService.encrypt(Role.SUPER_ADMIN.name)
+        c = EncryptionService.encrypt(Role.CONSULTANT.name)
 
         db = DBRepository.create_connection()
         cursor = db.cursor()

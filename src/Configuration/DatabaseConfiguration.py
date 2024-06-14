@@ -2,7 +2,7 @@ import os
 from sqlite3 import Connection
 
 from Debug.ConsoleLogger import ConsoleLogger
-from Repository.Repository import Repository
+from Repository.BaseClasses.DBRepository import DBRepository
 
 
 class DatabaseConfiguration:
@@ -13,7 +13,7 @@ class DatabaseConfiguration:
 
         # TODO: Handle database errors
 
-        db = Repository.create_connection()
+        db = DBRepository.create_connection()
 
         DatabaseConfiguration.__table_member(db)
         DatabaseConfiguration.__table_user(db)

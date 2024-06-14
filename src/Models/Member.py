@@ -19,19 +19,19 @@ class Member(EncryptableModel, DatabaseModel, SerializeableModel):
     ]
 
     # Member information
-    id: int
-    firstName: str
-    lastName: str
-    age: str
-    weight: str
-    gender: str
+    id: int = None
+    firstName: str = None
+    lastName: str = None
+    age: str = None
+    weight: str = None
+    gender: str = None
 
     # Member contact details
-    phoneNumber: str
-    emailAddress: str
+    phoneNumber: str = None
+    emailAddress: str = None
 
     # Member address
-    streetName: str
-    houseNumber: str
-    zipCode: str
-    city: str
+    streetName: str = None
+    houseNumber: str = None
+    zipCode: str = None
+    city: str = None

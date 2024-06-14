@@ -3,14 +3,14 @@ import sys
 from Configuration.DatabaseConfiguration import DatabaseConfiguration
 from Configuration.DatabaseSeeder import DatabaseSeeder
 from Controllers.LoginController import LoginController
-from Controllers.MemberController import MemberController
 from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
-from Repository.MemberRepository import MemberRepository
+from Enum.LogType import LogType
+from Models.User import User
+from Repository.LogRepository import LogRepository
 from Service.EncryptionService import EncryptionService
 from Service.IndexService import IndexService
-from Test.CreateAdminTest import CreateAdminTest
-from Test.CreateMemberTest import CreateMemberTest
+from Test.CreateConsultantTest import CreateConsultantTest
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 
@@ -38,8 +38,10 @@ def main():
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database geïndexeerd ", Color.OKGREEN), 0)
 
+    # NOTE: Devs run any test from this point
+
     # CreateMemberTest.run()
-    # CreateAdminTest.run(uname="admin", pword="admin")
+    # CreateConsultantTest.run(uname="consultant", pword="admin")
     # exit(0)
 
     lc = LoginController()

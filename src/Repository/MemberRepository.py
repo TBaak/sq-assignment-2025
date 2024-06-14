@@ -1,13 +1,13 @@
 from Debug.ConsoleLogger import ConsoleLogger
 from Models.Member import Member
-from Repository.Repository import Repository
+from Repository.BaseClasses.DBRepository import DBRepository
 
 
 class MemberRepository:
 
     @staticmethod
     def find_all() -> list[Member]:
-        db = Repository.create_connection()
+        db = DBRepository.create_connection()
         cursor = db.cursor()
 
         cursor.execute("SELECT * FROM member")
@@ -29,7 +29,7 @@ class MemberRepository:
 
     @staticmethod
     def persist_member(member: Member):
-        db = Repository.create_connection()
+        db = DBRepository.create_connection()
         cursor = db.cursor()
 
         member.encrypt()
@@ -72,7 +72,7 @@ class MemberRepository:
 
     @staticmethod
     def update_member(member):
-        db = Repository.create_connection()
+        db = DBRepository.create_connection()
         cursor = db.cursor()
 
         member.encrypt()
@@ -103,7 +103,7 @@ class MemberRepository:
 
     @staticmethod
     def delete_member(member):
-        db = Repository.create_connection()
+        db = DBRepository.create_connection()
         cursor = db.cursor()
 
         member.encrypt()

@@ -1,27 +1,28 @@
 from Enum.Color import Color
+from Enum.LogType import LogType
 from Form.MemberForm import MemberForm
-from Helpers.UserHelper import UserHelper
 from Models.Member import Member
+from Repository.LogRepository import LogRepository
 from Repository.MemberRepository import MemberRepository
+from Security.AuthorizationDecorator import Auth
+from Security.Enum.Permission import Permission
 from Service.IndexService import IndexService
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 from View.UserInterfacePrompt import UserInterfacePrompt
 from View.UserInterfaceTable import UserInterfaceTable
 from View.UserInterfaceTableRow import UserInterfaceTableRow
-from View.Validations.EmailValdation import EmailValidation
-from View.Validations.GenderValidation import GenderValidation
-from View.Validations.LengthValdation import LengthValidation
-from View.Validations.NotBlankValdation import NotBlankValidation
 from View.Validations.NumberValdation import NumberValidation
 from View.Validations.OnlyLetterValdation import OnlyLetterValidation
-from View.Validations.OnlyNumberValdation import OnlyNumberValidation
-from View.Validations.ZipcodeValdation import ZipcodeValidation
 
 
 class MemberController:
 
+    @Auth.permission_required(Permission.MemberDelete)
     def list_members(self):
+
+        LogRepository.log(LogType.MembersRead)
+
         members = MemberRepository.find_all()
 
         rows = map(lambda m: [m.firstName, m.lastName, m.age, m.emailAddress,
@@ -58,7 +59,10 @@ class MemberController:
 
         return self.list_members()
 
+    @Auth.permission_required(Permission.MemberRead)
     def show_member(self, member: Member):
+
+        LogRepository.log(LogType.MemberRead)
 
         rows = [
             UserInterfaceTableRow(["ID", member.id]),
@@ -102,8 +106,8 @@ class MemberController:
 
         self.list_members()
 
+    @Auth.permission_required(Permission.MemberCreate)
     def add_member(self):
-        UserHelper.has_permission(None)  # TODO: Implement this
 
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert(text="Member toevoegen", color=Color.OKBLUE))
@@ -115,6 +119,8 @@ class MemberController:
         member = Member()
         member.populate(list(fields.values()), list(fields.keys()))
 
+        LogRepository.log(LogType.MemberCreated, f"id: {member.id} name: {member.firstName} {member.lastName}")
+
         MemberRepository.persist_member(member)
 
         IndexService.index_database()
@@ -124,11 +130,12 @@ class MemberController:
             2
         )
 
+    @Auth.permission_required(Permission.MemberUpdate)
     def update_member(self, member: Member):
-        UserHelper.has_permission(None)  # TODO: Implement this
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert(text="Member " + member.firstName + " " + member.lastName + " wijziging", color=Color.OKBLUE))
+        ui.add(UserInterfaceAlert(text="Member " + member.firstName + " " + member.lastName + " wijziging",
+                                  color=Color.OKBLUE))
 
         ui = MemberForm.get_form(ui, member)
 
@@ -138,6 +145,8 @@ class MemberController:
 
         MemberRepository.update_member(member)
 
+        LogRepository.log(LogType.MemberUpdated, f"id: {member.id} name: {member.firstName} {member.lastName}")
+
         IndexService.index_database()
 
         UserInterfaceFlow.quick_run(
@@ -145,10 +154,12 @@ class MemberController:
             2
         )
 
+    @Auth.permission_required(Permission.MemberDelete)
     def delete_member(self, member: Member):
-        UserHelper.has_permission(None)  # TODO: Implement this
 
         MemberRepository.delete_member(member)
+
+        LogRepository.log(LogType.MemberDeleted, f"name: {member.firstName} {member.lastName}")
 
         IndexService.index_database()
 
@@ -156,4 +167,3 @@ class MemberController:
             UserInterfaceAlert("Member verwijderd", Color.OKGREEN),
             2
         )
-

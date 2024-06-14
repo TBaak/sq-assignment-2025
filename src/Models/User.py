@@ -5,11 +5,11 @@ from Models.BaseClasses.SerializeableModel import SerializeableModel
 
 class User(EncryptableModel, DatabaseModel, SerializeableModel):
 
-    ENCRYPTED_FIELDS = ['username', 'password']
+    ENCRYPTED_FIELDS = ['username', 'password', 'role']
 
-    id: int
-    username: str
-    password: bytes
-    role: str
+    id: int = None
+    username: str = None
+    password: bytes = None
+    role: str = None
 
 

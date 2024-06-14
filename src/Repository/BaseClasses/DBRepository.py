@@ -2,7 +2,7 @@ import sqlite3
 from sqlite3 import Error
 
 
-class Repository:
+class DBRepository:
 
     @staticmethod
     def create_connection():
