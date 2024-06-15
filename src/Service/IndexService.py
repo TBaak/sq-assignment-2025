@@ -2,6 +2,7 @@ from Debug.ConsoleLogger import ConsoleLogger
 from Enum.IndexDomain import IndexDomain
 from Models.User import User
 from Repository.BaseClasses.DBRepository import DBRepository
+from Security.Enum.Role import Role
 from Service.EncryptionService import EncryptionService
 
 
@@ -43,6 +44,13 @@ class IndexService:
 
         return results
 
+
+
+    @staticmethod
+    def find_user_by_role(role: Role):
+        return IndexService.__search_domain(IndexDomain.USER_ROLE, role.name.lower(), [])
+
+        
     @staticmethod
     def __search_domain(domain: IndexDomain, query: str, results: list[int]):
         for key, value in IndexService.index[domain.value].items():
@@ -58,7 +66,7 @@ class IndexService:
         conn = DBRepository.create_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id, username FROM user")
+        cursor.execute("SELECT id, username, role, firstName, lastName FROM user")
         users = cursor.fetchall()
 
         for user in users:
@@ -66,6 +74,21 @@ class IndexService:
                 IndexDomain.USER_USERNAME,
                 user[0],
                 EncryptionService.decrypt(user[1])
+            )
+            IndexService.__add_to_index(
+                IndexDomain.USER_ROLE,
+                user[0],
+                EncryptionService.decrypt(user[2])
+            )
+            IndexService.__add_to_index(
+                IndexDomain.USER_FIRSTNAME,
+                user[0],
+                EncryptionService.decrypt(user[3])
+            )
+            IndexService.__add_to_index(
+                IndexDomain.USER_LASTNAME,
+                user[0],
+                EncryptionService.decrypt(user[4])
             )
 
         ConsoleLogger.v("Users indexed")
@@ -138,7 +161,7 @@ class IndexService:
         if domain.value not in IndexService.index:
             IndexService.index[domain.value] = {}
 
-        if value not in IndexService.index[domain.value]:
+        if value.lower() not in IndexService.index[domain.value]:
             IndexService.index[domain.value][value.lower()] = []
 
         IndexService.index[domain.value][value.lower()].append(database_id)

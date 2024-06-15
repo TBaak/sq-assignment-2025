@@ -71,7 +71,7 @@ class MemberController:
 
         member_index = int(selected) - 1
 
-        self.show_member(members[member_index])
+        self.show_member(members[member_index]) # TODO: Handle out of bounds
 
         return self.list_members()
 

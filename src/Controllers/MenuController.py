@@ -1,5 +1,6 @@
 from Controllers.LogController import LogController
 from Controllers.MemberController import MemberController
+from Controllers.UserController import UserController
 from DTO.MenuOption import MenuOption
 from Enum.Color import Color
 from Security.AuthorizationService import AuthorizationService
@@ -50,6 +51,94 @@ class MenuController:
             UserInterfaceAlert("Tot ziens!", Color.HEADER)
         )
 
+    def user_type_menu(self) -> None:
+
+        uc = UserController()
+
+        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+                and not AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
+            return uc.list_consultant_users()
+
+        if not AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+                and AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
+            return uc.list_system_admin_users()
+
+        menu_ui = UserInterfaceFlow()
+        menu_ui.add(UserInterfaceAlert("Welke type user wilt u bekijken?", Color.HEADER))
+
+        rows = [
+            ["Consultant"],
+            ["Systeem beheerders"]
+        ]
+
+        rows = UserInterfaceTable.add_row_numbers(rows)
+
+        table_rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
+
+        menu_ui.add(UserInterfaceTable(rows=table_rows, has_header=False))
+        menu_ui.add(UserInterfacePrompt("Kies een optie", "selection"))
+
+        menu_result = menu_ui.run()
+
+        if menu_result["selection"] == "1":
+            return uc.list_consultant_users()
+
+        if menu_result["selection"] == "2":
+            return uc.list_system_admin_users()
+
+        UserInterfaceFlow.quick_run(
+            UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
+            1
+        )
+
+        mc = MenuController()
+        return mc.user_type_menu()
+
+    def user_create_type_menu(self) -> None:
+
+        uc = UserController()
+
+        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+                and not AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
+            print("implement") # TODO IMPLEMENT
+            exit(0)
+
+        if not AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+                and AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
+            return uc.create_system_admin()
+
+        menu_ui = UserInterfaceFlow()
+        menu_ui.add(UserInterfaceAlert("Welke type user wilt u toevoegen?", Color.HEADER))
+
+        rows = [
+            ["Consultant"],
+            ["Systeem beheerders"]
+        ]
+
+        rows = UserInterfaceTable.add_row_numbers(rows)
+
+        table_rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
+
+        menu_ui.add(UserInterfaceTable(rows=table_rows, has_header=False))
+        menu_ui.add(UserInterfacePrompt("Kies een optie", "selection"))
+
+        menu_result = menu_ui.run()
+
+        if menu_result["selection"] == "1":
+            print("implement")  # TODO IMPLEMENT
+            exit(0)
+
+        if menu_result["selection"] == "2":
+            return uc.create_system_admin()
+
+        UserInterfaceFlow.quick_run(
+            UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
+            1
+        )
+
+        mc = MenuController()
+        return mc.user_type_menu()
+
     def __create_menu_options(self):
 
         mc = MemberController()
@@ -64,3 +153,11 @@ class MenuController:
 
         if AuthorizationService.current_user_has_permission(Permission.LogRead):
             self.menu_choices.append(MenuOption("Logs bekijken", lc.list_logs))
+
+        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+                or AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
+            self.menu_choices.append(MenuOption("User overzicht", self.user_type_menu))
+
+        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+                or AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
+            self.menu_choices.append(MenuOption("User aanmaken", self.user_create_type_menu))

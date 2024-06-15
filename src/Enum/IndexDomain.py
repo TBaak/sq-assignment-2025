@@ -1,7 +1,11 @@
 from enum import Enum
 
+
 class IndexDomain(Enum):
+    USER_ROLE = "user_role"
     USER_USERNAME = "user_username"
+    USER_FIRSTNAME = "user_firstname"
+    USER_LASTNAME = "user_lastname"
 
     MEMBER_NUMBER = "member_number"
     MEMBER_FIRSTNAME = "member_firstname"

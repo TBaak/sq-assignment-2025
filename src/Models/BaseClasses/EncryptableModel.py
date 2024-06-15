@@ -15,6 +15,10 @@ class EncryptableModel:
         self.is_encrypted = True
         for field in self.ENCRYPTED_FIELDS:
             value = getattr(self, field)
+
+            if value is None:
+                continue
+
             setattr(self, field, EncryptionService.encrypt(value))
 
     def decrypt(self):
@@ -23,4 +27,9 @@ class EncryptableModel:
         self.is_encrypted = False
         for field in self.ENCRYPTED_FIELDS:
             value = getattr(self, field)
+
+            if value is None:
+                continue
+
             setattr(self, field, EncryptionService.decrypt(value))
+

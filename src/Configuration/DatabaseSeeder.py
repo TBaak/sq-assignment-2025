@@ -1,8 +1,65 @@
 from Models.Member import Member
+from Models.User import User
 from Repository.MemberRepository import MemberRepository
+from Repository.UserRepository import UserRepository
+from Security.Enum.Role import Role
+from Service.HashService import HashService
 
 
 class DatabaseSeeder:
+
+    @staticmethod
+    def users():
+        users = [
+            {
+                "username": "john_1010",
+                "password": HashService.hash("test"),
+                "firstName": "John",
+                "lastName": "Doe",
+                "registrationDate": "01-05-2024",
+                "role": Role.CONSULTANT.name
+            },
+            {
+                "username": "jane_doe_2024",
+                "password": HashService.hash("test"),
+                "firstName": "Jane",
+                "lastName": "Doe",
+                "registrationDate": "31-11-2022",
+                "role": Role.CONSULTANT.name
+            },
+            {
+                "username": "consultant",
+                "password": HashService.hash("test"),
+                "firstName": "Joe",
+                "lastName": "Schmo",
+                "registrationDate": "10-06-2024",
+                "role": Role.CONSULTANT.name
+            },
+            {
+                "username": "joe_rotterdam",
+                "password": HashService.hash("test"),
+                "firstName": "Joe",
+                "lastName": "Blow",
+                "registrationDate": "10-06-2024",
+                "role": Role.SYSTEM_ADMIN.name
+            },
+            {
+                "username": "s_admin",
+                "password": HashService.hash("test"),
+                "firstName": "Tom",
+                "lastName": "Baak",
+                "registrationDate": "10-06-2024",
+                "role": Role.SYSTEM_ADMIN.name
+            },
+        ]
+
+        for user_data in users:
+            user = User()
+            values = list(map(lambda x: str(x), user_data.values()))
+            user.populate(values, user_data.keys())
+            UserRepository.persist_user(user)
+
+
 
     @staticmethod
     def members():

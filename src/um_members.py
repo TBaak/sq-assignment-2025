@@ -42,8 +42,8 @@ def main():
 
     # NOTE: Devs run any test and seeds from this point
 
-    # DatabaseSeeder.members()
-
+    # DatabaseSeeder.users()
+    # exit(0)
     # CreateMemberTest.run()
     # CreateConsultantTest.run(uname="consultant", pword="admin")
     # exit(0)
