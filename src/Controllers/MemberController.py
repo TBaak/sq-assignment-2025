@@ -177,6 +177,7 @@ class MemberController:
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert(text="Member " + member.firstName + " " + member.lastName + " wijziging",
                                   color=Color.OKBLUE))
+        ui.add(UserInterfaceAlert(text=f"Druk op enter om waarde niet te wijzigingen", color=Color.OKCYAN))
 
         ui = MemberForm.get_form(ui, member)
 

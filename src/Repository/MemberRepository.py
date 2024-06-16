@@ -124,6 +124,8 @@ class MemberRepository:
 
         db.commit()
 
+        member.decrypt()
+
         cursor.close()
         db.close()
 
@@ -131,8 +133,6 @@ class MemberRepository:
     def delete_member(member):
         db = DBRepository.create_connection()
         cursor = db.cursor()
-
-        member.encrypt()
 
         cursor.execute(
             "DELETE FROM member WHERE id = :id",

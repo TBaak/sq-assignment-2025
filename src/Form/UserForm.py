@@ -31,8 +31,8 @@ class UserForm(Form):
         )
 
         ui.add(UserInterfacePrompt(
-            prompt_text="Username"
-                        "(Username moet tussen 8 en 10 karakters lang zijn, beginnen met een letter of "
+            prompt_text="Username "
+                        "(moet tussen 8 en 10 karakters lang zijn, beginnen met een letter of "
                         "underscore (_), en alleen letters, cijfers, underscores (_), apostrofes ('), "
                         "en punten (.) bevatten.)",
             memory_key="username",

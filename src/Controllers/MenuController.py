@@ -100,8 +100,7 @@ class MenuController:
 
         if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
                 and not AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
-            print("implement") # TODO IMPLEMENT
-            exit(0)
+            return uc.create_consultant()
 
         if not AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
                 and AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
@@ -125,8 +124,7 @@ class MenuController:
         menu_result = menu_ui.run()
 
         if menu_result["selection"] == "1":
-            print("implement")  # TODO IMPLEMENT
-            exit(0)
+            return uc.create_consultant()
 
         if menu_result["selection"] == "2":
             return uc.create_system_admin()
@@ -161,3 +159,8 @@ class MenuController:
         if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
                 or AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
             self.menu_choices.append(MenuOption("User aanmaken", self.user_create_type_menu))
+
+        uc = UserController()
+
+        if AuthorizationService.current_user_has_permission(Permission.UserUpdateOwnPassword):
+            self.menu_choices.append(MenuOption("Wachtwoord wijzigingen", uc.reset_own_password))

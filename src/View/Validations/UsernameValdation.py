@@ -7,7 +7,7 @@ class UsernameValidation(Validation):
 
     @staticmethod
     def validate(value: str) -> [bool, str]:
-        pattern = r"^(?i)[a-z_][a-z0-9_'.]{7,9}$" # TODO fix
+        pattern = r"(?i)^[a-z_][a-z0-9_'.]{7,9}$"
 
         if value is not "" and not re.match(pattern, value):
             return [False, "Username moet tussen 8 en 10 karakters lang zijn, beginnen met een letter of "

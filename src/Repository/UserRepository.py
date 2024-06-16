@@ -99,6 +99,54 @@ class UserRepository:
         db.close()
 
     @staticmethod
+    def update_user(user):
+        db = DBRepository.create_connection()
+        cursor = db.cursor()
+
+        user.encrypt()
+
+        cursor.execute(
+            "UPDATE user SET "
+            "firstName = :firstName,"
+            "lastName = :lastName,"
+            "username = :username "
+            "WHERE id = :id",
+            user.serialize()
+        )
+
+        ConsoleLogger.vv("Updated user: " + str(user.serialize()))
+
+        db.commit()
+
+        user.decrypt()
+
+        cursor.close()
+        db.close()
+
+    @staticmethod
+    def update_user_password(user):
+        db = DBRepository.create_connection()
+        cursor = db.cursor()
+
+        user.encrypt()
+
+        cursor.execute(
+            "UPDATE user SET "
+            "password = :password "
+            "WHERE id = :id",
+            user.serialize()
+        )
+
+        ConsoleLogger.vv("Updated user password: " + str(user.serialize()))
+
+        db.commit()
+
+        user.decrypt()
+
+        cursor.close()
+        db.close()
+
+    @staticmethod
     def generate_valid_password() -> str:
         # Define the character sets
         lowercase = string.ascii_lowercase
@@ -124,3 +172,20 @@ class UserRepository:
 
         # Convert the list to a string and return
         return ''.join(password)
+
+    @staticmethod
+    def delete_user(user: User):
+        db = DBRepository.create_connection()
+        cursor = db.cursor()
+
+        cursor.execute(
+            "DELETE FROM member WHERE id = :id",
+            user.serialize()
+        )
+
+        ConsoleLogger.vv("Deleted member: " + str(user.id))
+
+        db.commit()
+
+        cursor.close()
+        db.close()
