@@ -179,7 +179,7 @@ class UserRepository:
         cursor = db.cursor()
 
         cursor.execute(
-            "DELETE FROM member WHERE id = :id",
+            "DELETE FROM user WHERE id = :id",
             user.serialize()
         )
 
@@ -189,3 +189,21 @@ class UserRepository:
 
         cursor.close()
         db.close()
+
+    @staticmethod
+    def find_by_query(query: str, role: Role):
+        if query == "":
+            if role == Role.CONSULTANT:
+                return UserRepository.find_all_by_role(Role.CONSULTANT)
+            if role == Role.SYSTEM_ADMIN:
+                return UserRepository.find_all_by_role(Role.SYSTEM_ADMIN)
+
+        member_ids = IndexService.find_user_by_query(query, role)
+
+        if len(member_ids) == 0:
+            return []
+
+        if role == Role.CONSULTANT:
+            return UserRepository.find_all_by_role(Role.CONSULTANT, member_ids)
+        if role == Role.SYSTEM_ADMIN:
+            return UserRepository.find_all_by_role(Role.SYSTEM_ADMIN, member_ids)

@@ -1,3 +1,4 @@
+from Controllers.BackupController import BackupController
 from Controllers.LogController import LogController
 from Controllers.MemberController import MemberController
 from Controllers.UserController import UserController
@@ -159,6 +160,14 @@ class MenuController:
         if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
                 or AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
             self.menu_choices.append(MenuOption("User aanmaken", self.user_create_type_menu))
+
+        bc = BackupController()
+
+        if AuthorizationService.current_user_has_permission(Permission.BackupCreate):
+            self.menu_choices.append(MenuOption("Backup maken", bc.create_backup))
+
+        if AuthorizationService.current_user_has_permission(Permission.BackupRestore):
+            self.menu_choices.append(MenuOption("Backup terugzetten", bc.list_backups))
 
         uc = UserController()
 

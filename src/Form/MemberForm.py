@@ -5,6 +5,7 @@ from Form.BaseClasses.Form import Form
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 from View.UserInterfacePrompt import UserInterfacePrompt
+from View.Validations.CityValdation import CityValidation
 from View.Validations.EmailValdation import EmailValidation
 from View.Validations.GenderValidation import GenderValidation
 from View.Validations.LengthValdation import LengthValidation
@@ -61,7 +62,6 @@ class MemberForm(Form):
 
         ui.add(UserInterfaceAlert(text="Voer de contact gegevens in van de nieuwe member", color=Color.WHITE))
 
-        # TODO: Check uniqueness
         ui.add(UserInterfacePrompt(
             prompt_text="E-mailadres",
             memory_key="emailAddress",
@@ -102,10 +102,11 @@ class MemberForm(Form):
         )
 
         ui.add(UserInterfacePrompt(
-            prompt_text="Stad",
+            prompt_text="Stad "
+                        "(Den Haag, Rotterdam, Amsterdam, Utrecht, Eindhoven, Tilburg, Groningen, Almere, Breda, Nijmegen)",
             memory_key="city",
             value=existing.city if existing else None,
-            validations=[NotBlankValidation(), OnlyLetterValidation()])
+            validations=[NotBlankValidation(), CityValidation()])
         )
 
         return ui

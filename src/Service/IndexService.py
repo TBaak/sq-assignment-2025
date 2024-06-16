@@ -1,3 +1,5 @@
+from typing import Optional
+
 from Debug.ConsoleLogger import ConsoleLogger
 from Enum.IndexDomain import IndexDomain
 from Models.User import User
@@ -13,7 +15,10 @@ class IndexService:
     def index_database():
         ConsoleLogger.v("Indexing database")
 
-        IndexService.index = None
+        IndexService.index = {}
+
+        IndexService.__init_domains()
+
         IndexService.__index_users()
         IndexService.__index_members()
 
@@ -22,11 +27,24 @@ class IndexService:
         pass
 
     @staticmethod
+    def __init_domains():
+        IndexService.index[IndexDomain.USER_USERNAME.value] = {}
+        IndexService.index[IndexDomain.USER_ROLE.value] = {}
+        IndexService.index[IndexDomain.USER_FIRSTNAME.value] = {}
+        IndexService.index[IndexDomain.USER_LASTNAME.value] = {}
+        IndexService.index[IndexDomain.MEMBER_NUMBER.value] = {}
+        IndexService.index[IndexDomain.MEMBER_FIRSTNAME.value] = {}
+        IndexService.index[IndexDomain.MEMBER_LASTNAME.value] = {}
+        IndexService.index[IndexDomain.MEMBER_ADDRESS.value] = {}
+        IndexService.index[IndexDomain.MEMBER_EMAIL.value] = {}
+        IndexService.index[IndexDomain.MEMBER_PHONE.value] = {}
+
+    @staticmethod
     def add_user_to_index(user: User):
         pass
 
     @staticmethod
-    def find_user_by_username(username: str) -> int:
+    def find_user_by_username(username: str) -> Optional[int]:
         for key, value in IndexService.index[IndexDomain.USER_USERNAME.value].items():
             if key == username:
                 return value[0]
@@ -44,13 +62,23 @@ class IndexService:
 
         return results
 
+    @staticmethod
+    def find_user_by_query(query, role: Role):
 
+        resultsForRole = IndexService.find_user_by_role(role)
+
+        results = []
+
+        results = IndexService.__search_domain(IndexDomain.USER_USERNAME, query, results)
+        results = IndexService.__search_domain(IndexDomain.USER_FIRSTNAME, query, results)
+        results = IndexService.__search_domain(IndexDomain.USER_LASTNAME, query, results)
+
+        return IndexService.__intersection(results, resultsForRole)
 
     @staticmethod
     def find_user_by_role(role: Role):
         return IndexService.__search_domain(IndexDomain.USER_ROLE, role.name.lower(), [])
 
-        
     @staticmethod
     def __search_domain(domain: IndexDomain, query: str, results: list[int]):
         for key, value in IndexService.index[domain.value].items():
@@ -165,3 +193,8 @@ class IndexService:
             IndexService.index[domain.value][value.lower()] = []
 
         IndexService.index[domain.value][value.lower()].append(database_id)
+
+    @staticmethod
+    def __intersection(lst1, lst2):
+        lst3 = [value for value in lst1 if value in lst2]
+        return lst3

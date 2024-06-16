@@ -1,19 +1,11 @@
 import sys
 
 from Configuration.DatabaseConfiguration import DatabaseConfiguration
-from Configuration.DatabaseSeeder import DatabaseSeeder
 from Controllers.LoginController import LoginController
 from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
-from Enum.LogType import LogType
-from Models.User import User
-from Repository.BaseClasses.DBRepository import DBRepository
-from Repository.LogRepository import LogRepository
-from Repository.MemberRepository import MemberRepository
 from Service.EncryptionService import EncryptionService
 from Service.IndexService import IndexService
-from Test.CreateConsultantTest import CreateConsultantTest
-from Test.CreateMemberTest import CreateMemberTest
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 

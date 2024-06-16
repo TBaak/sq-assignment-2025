@@ -10,9 +10,6 @@ class DatabaseConfiguration:
 
     @staticmethod
     def start():
-
-        # TODO: Handle database errors
-
         db = DBRepository.create_connection()
 
         DatabaseConfiguration.__table_member(db)

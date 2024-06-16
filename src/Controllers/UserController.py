@@ -19,6 +19,7 @@ from View.UserInterfaceFlow import UserInterfaceFlow
 from View.UserInterfacePrompt import UserInterfacePrompt
 from View.UserInterfaceTable import UserInterfaceTable
 from View.UserInterfaceTableRow import UserInterfaceTableRow
+from View.Validations.NoSpecialCharsValidation import NoSpecialCharsValidation
 from View.Validations.OnlyLetterValdation import OnlyLetterValidation
 
 
@@ -81,20 +82,27 @@ class UserController:
             return
 
         if selected.upper() == "Z":
-            print("implement this")
-            exit(0)
+            if role == Role.CONSULTANT:
+                return self.search_consultant_user()
+            if role == Role.SYSTEM_ADMIN:
+                return self.search_system_admin_user()
 
-        user_index = int(selected) - 1  # TODO: Handle out of bounds
+        user_index = int(selected) - 1
 
-        selected_user = users[user_index]
+        try:
+            selected_user = users[user_index]
+        except IndexError:
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
+                1
+            )
+            return
 
         if role == Role.SYSTEM_ADMIN:
             self.show_system_admin_user(selected_user)
 
         if role == Role.CONSULTANT:
             self.show_consultant_user(selected_user)
-
-        # TODO no role?
 
         return self.__show_users(role, users)
 
@@ -160,10 +168,10 @@ class UserController:
                 self.reset_system_admin_user(user)
 
         if user.role == Role.CONSULTANT:
-            self.list_consultant_users()
+            return self.list_consultant_users()
 
         if user.role == Role.SYSTEM_ADMIN:
-            self.list_system_admin_users()
+            return self.list_system_admin_users()
 
     @Auth.permission_required(Permission.UserSystemAdminCreate)
     def create_system_admin(self):
@@ -276,7 +284,6 @@ class UserController:
             2
         )
 
-
     @Auth.permission_required(Permission.UserConsultantResetPassword)
     def reset_consultant_user(self, user: User):
         return self.reset_password(user)
@@ -327,3 +334,40 @@ class UserController:
             UserInterfaceAlert("Wachtwoord geüpdatet", Color.OKGREEN),
             2
         )
+
+    @Auth.permission_required(Permission.UserConsultantRead)
+    def search_consultant_user(self):
+        return self.search_users(Role.CONSULTANT)
+
+    @Auth.permission_required(Permission.UserSystemAdminRead)
+    def search_system_admin_user(self):
+        return self.search_users(Role.SYSTEM_ADMIN)
+
+    def search_users(self, role: Role):
+        LogRepository.log(LogType.MembersRead)
+
+        query_ui = UserInterfaceFlow()
+        query_ui.add(UserInterfacePrompt(
+            prompt_text="Zoeken op naam of username",
+            memory_key="query",
+            validations=[NoSpecialCharsValidation()]
+        )
+        )
+        query = query_ui.run()['query']
+
+        users = UserRepository.find_by_query(query, role)
+
+        if len(users) == 0:
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Geen resultaten gevonden", Color.FAIL),
+                2
+            )
+            if role == Role.CONSULTANT:
+                return self.list_consultant_users()
+            if role == Role.SYSTEM_ADMIN:
+                return self.list_system_admin_users()
+
+        if role == Role.CONSULTANT:
+            return self.list_consultant_users(users)
+        if role == Role.SYSTEM_ADMIN:
+            return self.list_system_admin_users(users)

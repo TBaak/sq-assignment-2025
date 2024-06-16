@@ -10,9 +10,11 @@ from Service.EncryptionService import EncryptionService
 class LogRepository:
     # TODO: OWASP logging?
 
+    logFilename = "log.csv"
+
     @staticmethod
     def log(log_type: LogType, additional_message: str = ""):
-        log_file = open("log.csv", "a")
+        log_file = open(LogRepository.logFilename, "a")
 
         count = LogRepository.__get_log_length()
 
@@ -35,7 +37,7 @@ class LogRepository:
 
     @staticmethod
     def find_all() -> list[str]:
-        log_file = open("log.csv", "r") # TODO: Handle not exist
+        log_file = open(LogRepository.logFilename, "r") # TODO: Handle not exist
 
         logs = []
 
@@ -48,7 +50,7 @@ class LogRepository:
 
     @staticmethod
     def __get_log_length() -> int:
-        log_file = open("log.csv", "r")
+        log_file = open(LogRepository.logFilename, "r")
 
         count = 0
         for count, line in enumerate(log_file):

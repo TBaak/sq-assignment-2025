@@ -71,9 +71,13 @@ class MemberController:
 
         member_index = int(selected) - 1
 
-        self.show_member(members[member_index]) # TODO: Handle out of bounds
-
-        return self.list_members()
+        try:
+            self.show_member(members[member_index])
+        except IndexError:
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
+                1
+            )
 
     @Auth.permission_required(Permission.MemberRead)
     def search_members(self):
