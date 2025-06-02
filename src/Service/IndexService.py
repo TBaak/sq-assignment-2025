@@ -20,7 +20,7 @@ class IndexService:
         IndexService.__init_domains()
 
         IndexService.__index_users()
-        IndexService.__index_members()
+        IndexService.__index_travellers()
 
         ConsoleLogger.v("Database indexed")
 
@@ -32,12 +32,12 @@ class IndexService:
         IndexService.index[IndexDomain.USER_ROLE.value] = {}
         IndexService.index[IndexDomain.USER_FIRSTNAME.value] = {}
         IndexService.index[IndexDomain.USER_LASTNAME.value] = {}
-        IndexService.index[IndexDomain.MEMBER_NUMBER.value] = {}
-        IndexService.index[IndexDomain.MEMBER_FIRSTNAME.value] = {}
-        IndexService.index[IndexDomain.MEMBER_LASTNAME.value] = {}
-        IndexService.index[IndexDomain.MEMBER_ADDRESS.value] = {}
-        IndexService.index[IndexDomain.MEMBER_EMAIL.value] = {}
-        IndexService.index[IndexDomain.MEMBER_PHONE.value] = {}
+        IndexService.index[IndexDomain.TRAVELLER_NUMBER.value] = {}
+        IndexService.index[IndexDomain.TRAVELLER_FIRSTNAME.value] = {}
+        IndexService.index[IndexDomain.TRAVELLER_LASTNAME.value] = {}
+        IndexService.index[IndexDomain.TRAVELLER_ADDRESS.value] = {}
+        IndexService.index[IndexDomain.TRAVELLER_EMAIL.value] = {}
+        IndexService.index[IndexDomain.TRAVELLER_PHONE.value] = {}
 
     @staticmethod
     def add_user_to_index(user: User):
@@ -50,15 +50,15 @@ class IndexService:
                 return value[0]
 
     @staticmethod
-    def find_member_by_query(query: str):
+    def find_traveller_by_query(query: str):
         results = []
 
-        results = IndexService.__search_domain(IndexDomain.MEMBER_NUMBER, query, results)
-        results = IndexService.__search_domain(IndexDomain.MEMBER_FIRSTNAME, query, results)
-        results = IndexService.__search_domain(IndexDomain.MEMBER_LASTNAME, query, results)
-        results = IndexService.__search_domain(IndexDomain.MEMBER_ADDRESS, query, results)
-        results = IndexService.__search_domain(IndexDomain.MEMBER_EMAIL, query, results)
-        results = IndexService.__search_domain(IndexDomain.MEMBER_PHONE, query, results)
+        results = IndexService.__search_domain(IndexDomain.TRAVELLER_NUMBER, query, results)
+        results = IndexService.__search_domain(IndexDomain.TRAVELLER_FIRSTNAME, query, results)
+        results = IndexService.__search_domain(IndexDomain.TRAVELLER_LASTNAME, query, results)
+        results = IndexService.__search_domain(IndexDomain.TRAVELLER_ADDRESS, query, results)
+        results = IndexService.__search_domain(IndexDomain.TRAVELLER_EMAIL, query, results)
+        results = IndexService.__search_domain(IndexDomain.TRAVELLER_PHONE, query, results)
 
         return results
 
@@ -94,7 +94,7 @@ class IndexService:
         conn = DBRepository.create_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id, username, role, firstName, lastName FROM user")
+        cursor.execute("SELECT id, username, role, firstName, lastName FROM users")
         users = cursor.fetchall()
 
         for user in users:
@@ -122,9 +122,9 @@ class IndexService:
         ConsoleLogger.v("Users indexed")
 
     @staticmethod
-    def __index_members():
+    def __index_travellers():
 
-        ConsoleLogger.v("Indexing Members")
+        ConsoleLogger.v("Indexing Travellers")
 
         conn = DBRepository.create_connection()
         cursor = conn.cursor()
@@ -132,53 +132,53 @@ class IndexService:
         cursor.execute("SELECT "
                        "id,"
                        "number,"
-                       "firstName,"
-                       "lastName,"
+                       "first_name,"
+                       "last_name,"
 
-                       "streetName,"
-                       "houseNumber,"
-                       "zipCode,"
+                       "street_name,"
+                       "house_number,"
+                       "zip_code,"
 
-                       "emailAddress,"
-                       "phoneNumber "
-                       "FROM member")
+                       "email_address,"
+                       "phone_number "
+                       "FROM travellers")
         users = cursor.fetchall()
 
         for user in users:
             IndexService.__add_to_index(
-                IndexDomain.MEMBER_NUMBER,
+                IndexDomain.TRAVELLER_NUMBER,
                 user[0],
                 EncryptionService.decrypt(user[1])
             )
             IndexService.__add_to_index(
-                IndexDomain.MEMBER_FIRSTNAME,
+                IndexDomain.TRAVELLER_FIRSTNAME,
                 user[0],
                 EncryptionService.decrypt(user[2])
             )
             IndexService.__add_to_index(
-                IndexDomain.MEMBER_LASTNAME,
+                IndexDomain.TRAVELLER_LASTNAME,
                 user[0],
                 EncryptionService.decrypt(user[3])
             )
             IndexService.__add_to_index(
-                IndexDomain.MEMBER_ADDRESS,
+                IndexDomain.TRAVELLER_ADDRESS,
                 user[0],
                 EncryptionService.decrypt(user[4]) + " "
                 + EncryptionService.decrypt(user[5]) + " "
                 + EncryptionService.decrypt(user[6])
             )
             IndexService.__add_to_index(
-                IndexDomain.MEMBER_EMAIL,
+                IndexDomain.TRAVELLER_EMAIL,
                 user[0],
                 EncryptionService.decrypt(user[7])
             )
             IndexService.__add_to_index(
-                IndexDomain.MEMBER_PHONE,
+                IndexDomain.TRAVELLER_PHONE,
                 user[0],
                 EncryptionService.decrypt(user[8])
             )
 
-        ConsoleLogger.v("Members indexed")
+        ConsoleLogger.v("Travellers indexed")
 
     @staticmethod
     def __add_to_index(domain: IndexDomain, database_id: int, value: str):

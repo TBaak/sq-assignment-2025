@@ -16,39 +16,32 @@ from View.Validations.OnlyNumberValdation import OnlyNumberValidation
 from View.Validations.ZipcodeValdation import ZipcodeValidation
 
 
-class MemberForm(Form):
+class TravellerForm(Form):
 
     T = TypeVar("T")
 
     @staticmethod
     def get_form(ui: UserInterfaceFlow, existing: T = None) -> UserInterfaceFlow:
-        ui.add(UserInterfaceAlert(text="Voer de gegevens in van de nieuwe member", color=Color.WHITE))
+        ui.add(UserInterfaceAlert(text="Voer de gegevens in van de nieuwe traveller", color=Color.WHITE))
         ui.add(UserInterfacePrompt(
             prompt_text="Voornaam",
-            memory_key="firstName",
-            value=existing.firstName if existing else None,
+            memory_key="first_name",
+            value=existing.first_name if existing else None,
             validations=[NotBlankValidation(), OnlyLetterValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Achternaam",
-            memory_key="lastName",
-            value=existing.lastName if existing else None,
+            memory_key="last_name",
+            value=existing.last_name if existing else None,
             validations=[NotBlankValidation(), OnlyLetterValidation()])
         )
 
         ui.add(UserInterfacePrompt(
-            prompt_text="Leeftijd",
-            memory_key="age",
-            value=existing.age if existing else None,
-            validations=[NotBlankValidation(), NumberValidation()])
-        )
-
-        ui.add(UserInterfacePrompt(
-            prompt_text="Gewicht in (kg)",
-            memory_key="weight",
-            value=existing.weight if existing else None,
-            validations=[NotBlankValidation(), NumberValidation()])
+            prompt_text="Geboorte datum (YYYY-MM-DD)",
+            memory_key="dob",
+            value=existing.dob if existing else None,
+            validations=[NotBlankValidation()]) # DOBValidation
         )
 
         ui.add(UserInterfacePrompt(
@@ -60,43 +53,50 @@ class MemberForm(Form):
 
         ui.add(UserInterfaceAlert(text="==============", color=Color.WHITE))
 
-        ui.add(UserInterfaceAlert(text="Voer de contact gegevens in van de nieuwe member", color=Color.WHITE))
+        ui.add(UserInterfaceAlert(text="Voer de contact gegevens in van de nieuwe traveller", color=Color.WHITE))
 
         ui.add(UserInterfacePrompt(
             prompt_text="E-mailadres",
-            memory_key="emailAddress",
+            memory_key="email_address",
             value=existing.emailAddress if existing else None,
             validations=[NotBlankValidation(), EmailValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Telefoon nummer (+31-6-NNNNNNNN) +31-6-",
-            memory_key="phoneNumber",
+            memory_key="phone_number",
+            value=existing.phoneNumber if existing else None,
+            validations=[NotBlankValidation(), OnlyNumberValidation(), LengthValidation(8)])
+        )
+
+        ui.add(UserInterfacePrompt(
+            prompt_text="Rijbewijs nummer", # Format
+            memory_key="driving_licence_number",
             value=existing.phoneNumber if existing else None,
             validations=[NotBlankValidation(), OnlyNumberValidation(), LengthValidation(8)])
         )
 
         ui.add(UserInterfaceAlert(text="==============", color=Color.WHITE))
 
-        ui.add(UserInterfaceAlert(text="Voer de adres gegevens in van de nieuwe member", color=Color.WHITE))
+        ui.add(UserInterfaceAlert(text="Voer de adres gegevens in van de nieuwe traveller", color=Color.WHITE))
 
         ui.add(UserInterfacePrompt(
             prompt_text="Straatnaam",
-            memory_key="streetName",
+            memory_key="street_name",
             value=existing.streetName if existing else None,
             validations=[NotBlankValidation(), OnlyLetterValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Huisnummer",
-            memory_key="houseNumber",
+            memory_key="house_number",
             value=existing.houseNumber if existing else None,
             validations=[NotBlankValidation(), NumberValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Postcode (XXXXAB)",
-            memory_key="zipCode",
+            memory_key="zip_code",
             value=existing.zipCode if existing else None,
             validations=[NotBlankValidation(), ZipcodeValidation()])
         )

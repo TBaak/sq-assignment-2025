@@ -2,5 +2,5 @@ from enum import Enum
 
 
 class UserType(Enum):
-    Consultant = 1
+    ServiceEngineer = 1
     SystemAdmin = 2

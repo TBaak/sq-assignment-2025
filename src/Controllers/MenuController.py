@@ -1,6 +1,6 @@
 from Controllers.BackupController import BackupController
 from Controllers.LogController import LogController
-from Controllers.MemberController import MemberController
+from Controllers.TravellerController import TravellerController
 from Controllers.UserController import UserController
 from DTO.MenuOption import MenuOption
 from Enum.Color import Color
@@ -56,11 +56,11 @@ class MenuController:
 
         uc = UserController()
 
-        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+        if AuthorizationService.current_user_has_permission(Permission.UserServiceEngineerRead) \
                 and not AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
-            return uc.list_consultant_users()
+            return uc.list_service_engineer_users()
 
-        if not AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+        if not AuthorizationService.current_user_has_permission(Permission.UserServiceEngineerRead) \
                 and AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
             return uc.list_system_admin_users()
 
@@ -68,7 +68,7 @@ class MenuController:
         menu_ui.add(UserInterfaceAlert("Welke type user wilt u bekijken?", Color.HEADER))
 
         rows = [
-            ["Consultant"],
+            ["Service Engineers"],
             ["Systeem beheerders"]
         ]
 
@@ -82,7 +82,7 @@ class MenuController:
         menu_result = menu_ui.run()
 
         if menu_result["selection"] == "1":
-            return uc.list_consultant_users()
+            return uc.list_service_engineer_users()
 
         if menu_result["selection"] == "2":
             return uc.list_system_admin_users()
@@ -99,11 +99,11 @@ class MenuController:
 
         uc = UserController()
 
-        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+        if AuthorizationService.current_user_has_permission(Permission.UserServiceEngineerRead) \
                 and not AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
-            return uc.create_consultant()
+            return uc.create_service_engineer()
 
-        if not AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+        if not AuthorizationService.current_user_has_permission(Permission.UserServiceEngineerRead) \
                 and AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
             return uc.create_system_admin()
 
@@ -111,7 +111,7 @@ class MenuController:
         menu_ui.add(UserInterfaceAlert("Welke type user wilt u toevoegen?", Color.HEADER))
 
         rows = [
-            ["Consultant"],
+            ["Service Engineers"],
             ["Systeem beheerders"]
         ]
 
@@ -125,7 +125,7 @@ class MenuController:
         menu_result = menu_ui.run()
 
         if menu_result["selection"] == "1":
-            return uc.create_consultant()
+            return uc.create_service_engineer()
 
         if menu_result["selection"] == "2":
             return uc.create_system_admin()
@@ -140,24 +140,24 @@ class MenuController:
 
     def __create_menu_options(self):
 
-        mc = MemberController()
+        tc = TravellerController()
 
-        if AuthorizationService.current_user_has_permission(Permission.MemberRead):
-            self.menu_choices.append(MenuOption("Member overzicht", mc.list_members))
+        if AuthorizationService.current_user_has_permission(Permission.TravellerRead):
+            self.menu_choices.append(MenuOption("Traveller overzicht", tc.list_travellers))
 
-        if AuthorizationService.current_user_has_permission(Permission.MemberCreate):
-            self.menu_choices.append(MenuOption("Member toevoegen", mc.add_member))
+        if AuthorizationService.current_user_has_permission(Permission.TravellerCreate):
+            self.menu_choices.append(MenuOption("Traveller toevoegen", tc.add_traveller))
 
         lc = LogController()
 
         if AuthorizationService.current_user_has_permission(Permission.LogRead):
             self.menu_choices.append(MenuOption("Logs bekijken", lc.list_logs))
 
-        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+        if AuthorizationService.current_user_has_permission(Permission.UserServiceEngineerRead) \
                 or AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
             self.menu_choices.append(MenuOption("User overzicht", self.user_type_menu))
 
-        if AuthorizationService.current_user_has_permission(Permission.UserConsultantRead) \
+        if AuthorizationService.current_user_has_permission(Permission.UserServiceEngineerRead) \
                 or AuthorizationService.current_user_has_permission(Permission.UserSystemAdminRead):
             self.menu_choices.append(MenuOption("User aanmaken", self.user_create_type_menu))
 

@@ -1,6 +1,6 @@
-from Models.Member import Member
+from Models.Traveller import Traveller
 from Models.User import User
-from Repository.MemberRepository import MemberRepository
+from Repository.TravellerRepository import TravellerRepository
 from Repository.UserRepository import UserRepository
 from Security.Enum.Role import Role
 from Service.HashService import HashService
@@ -17,7 +17,7 @@ class DatabaseSeeder:
                 "firstName": "John",
                 "lastName": "Doe",
                 "registrationDate": "01-05-2024",
-                "role": Role.CONSULTANT.name
+                "role": Role.SERVICE_ENGINEER.name
             },
             {
                 "username": "jane_doe_2024",
@@ -25,15 +25,15 @@ class DatabaseSeeder:
                 "firstName": "Jane",
                 "lastName": "Doe",
                 "registrationDate": "31-11-2022",
-                "role": Role.CONSULTANT.name
+                "role": Role.SERVICE_ENGINEER.name
             },
             {
-                "username": "consultant",
+                "username": "service_engineer",
                 "password": HashService.hash("test"),
                 "firstName": "Joe",
                 "lastName": "Schmo",
                 "registrationDate": "10-06-2024",
-                "role": Role.CONSULTANT.name
+                "role": Role.SERVICE_ENGINEER.name
             },
             {
                 "username": "joe_rotterdam",
@@ -365,7 +365,7 @@ class DatabaseSeeder:
                     "emailAddress": "cwagstaff2r@economist.com", "phoneNumber": 45561725, "age": 34}]
 
         for member_data in members:
-            member = Member()
+            member = Traveller()
             values = list(map(lambda x: str(x), member_data.values()))
             member.populate(values, member_data.keys())
-            MemberRepository.persist_member(member)
+            TravellerRepository.persist_traveller(member)

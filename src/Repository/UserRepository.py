@@ -193,8 +193,8 @@ class UserRepository:
     @staticmethod
     def find_by_query(query: str, role: Role):
         if query == "":
-            if role == Role.CONSULTANT:
-                return UserRepository.find_all_by_role(Role.CONSULTANT)
+            if role == Role.SERVICE_ENGINEER:
+                return UserRepository.find_all_by_role(Role.SERVICE_ENGINEER)
             if role == Role.SYSTEM_ADMIN:
                 return UserRepository.find_all_by_role(Role.SYSTEM_ADMIN)
 
@@ -203,7 +203,7 @@ class UserRepository:
         if len(member_ids) == 0:
             return []
 
-        if role == Role.CONSULTANT:
-            return UserRepository.find_all_by_role(Role.CONSULTANT, member_ids)
+        if role == Role.SERVICE_ENGINEER:
+            return UserRepository.find_all_by_role(Role.SERVICE_ENGINEER, member_ids)
         if role == Role.SYSTEM_ADMIN:
             return UserRepository.find_all_by_role(Role.SYSTEM_ADMIN, member_ids)

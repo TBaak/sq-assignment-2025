@@ -5,7 +5,7 @@ from Enum.Color import Color
 
 class UserInterfaceFlowItem(ABC):
 
-    consoleTitle: str = "Unique Meal Member Management System"
+    consoleTitle: str = "Urban Mobility Management Systeem"
     consoleColor: Color = Color.WHITE
     memoryKey: str = None
 

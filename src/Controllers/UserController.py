@@ -25,16 +25,16 @@ from View.Validations.OnlyLetterValdation import OnlyLetterValidation
 
 class UserController:
 
-    @Auth.permission_required(Permission.UserConsultantRead)
-    def list_consultant_users(self, users: list[User] = None):
+    @Auth.permission_required(Permission.UserServiceEngineerRead)
+    def list_service_engineer_users(self, users: list[User] = None):
 
         UserInterfaceFlow.quick_run_till_next(
-            UserInterfaceAlert("Consultant overzicht aan het laden...", Color.HEADER)
+            UserInterfaceAlert("Service Engineer overzicht aan het laden...", Color.HEADER)
         )
 
-        LogRepository.log(LogType.UserConsultantsRead)
+        LogRepository.log(LogType.UserServiceEngineersRead)
 
-        self.__show_users(Role.CONSULTANT, users)
+        self.__show_users(Role.SERVICE_ENGINEER, users)
 
     @Auth.permission_required(Permission.UserSystemAdminRead)
     def list_system_admin_users(self, users: list[User] = None):
@@ -49,13 +49,13 @@ class UserController:
 
     def __show_users(self, role: Role, users: list[User] = None):
 
-        header_type = "Consultant" if role.CONSULTANT else "Systeem beheerder"
+        header_type = "Service Engineer" if role.SERVICE_ENGINEER else "Systeem beheerder"
         header = f"{header_type} overzicht" if users is None else "Zoekresultaten"
 
         if users is None:
             users = UserRepository.find_all_by_role(role)
 
-        rows = map(lambda u: [u.username, u.firstName, u.lastName, u.registrationDate], users)
+        rows = map(lambda u: [u.username, u.first_name, u.last_name, u.registrationDate], users)
         rows = list(rows)
 
         for index, row in enumerate(rows):
@@ -82,8 +82,8 @@ class UserController:
             return
 
         if selected.upper() == "Z":
-            if role == Role.CONSULTANT:
-                return self.search_consultant_user()
+            if role == Role.SERVICE_ENGINEER:
+                return self.search_service_engineer_user()
             if role == Role.SYSTEM_ADMIN:
                 return self.search_system_admin_user()
 
@@ -101,15 +101,15 @@ class UserController:
         if role == Role.SYSTEM_ADMIN:
             self.show_system_admin_user(selected_user)
 
-        if role == Role.CONSULTANT:
-            self.show_consultant_user(selected_user)
+        if role == Role.SERVICE_ENGINEER:
+            self.show_service_engineer_user(selected_user)
 
         return self.__show_users(role, users)
 
-    @Auth.permission_required(Permission.UserConsultantRead)
-    def show_consultant_user(self, user: User):
+    @Auth.permission_required(Permission.UserServiceEngineerRead)
+    def show_service_engineer_user(self, user: User):
 
-        LogRepository.log(LogType.UserConsultantRead)
+        LogRepository.log(LogType.UserServiceEngineerRead)
 
         return self.__show_user(user)
 
@@ -128,7 +128,7 @@ class UserController:
             UserInterfaceTableRow(["Achternaam", user.lastName]),
             UserInterfaceTableRow(["Registratie datum", user.registrationDate]),
 
-            UserInterfaceTableRow(["Rol", "Consultant" if user.role == Role.CONSULTANT else "Systeem beheerder"])
+            UserInterfaceTableRow(["Rol", "Service Engineer" if user.role == Role.SERVICE_ENGINEER else "Systeem beheerder"])
         ]
 
         ui = UserInterfaceFlow()
@@ -147,43 +147,45 @@ class UserController:
         selected = selection["action"]
 
         if selected == "":
-            return
+            return None
 
         if selected.upper() == "W":
-            if user.role == Role.CONSULTANT.name:
-                self.update_consultant_user(user)
+            if user.role == Role.SERVICE_ENGINEER.name:
+                self.update_service_engineer_user(user)
             if user.role == Role.SYSTEM_ADMIN.name:
                 self.update_system_admin_user(user)
 
         elif selected.upper() == "D":
-            if user.role == Role.CONSULTANT.name:
-                self.delete_consultant_user(user)
+            if user.role == Role.SERVICE_ENGINEER.name:
+                self.delete_service_engineer_user(user)
             if user.role == Role.SYSTEM_ADMIN.name:
                 self.delete_system_admin_user(user)
 
         elif selected.upper() == "R":
-            if user.role == Role.CONSULTANT.name:
-                self.reset_consultant_user(user)
+            if user.role == Role.SERVICE_ENGINEER.name:
+                self.reset_service_engineer_user(user)
             if user.role == Role.SYSTEM_ADMIN.name:
                 self.reset_system_admin_user(user)
 
-        if user.role == Role.CONSULTANT:
-            return self.list_consultant_users()
+        if user.role == Role.SERVICE_ENGINEER:
+            return self.list_service_engineer_users()
 
         if user.role == Role.SYSTEM_ADMIN:
             return self.list_system_admin_users()
+
+        return None
 
     @Auth.permission_required(Permission.UserSystemAdminCreate)
     def create_system_admin(self):
         return self.__create_user(Role.SYSTEM_ADMIN)
 
-    @Auth.permission_required(Permission.UserConsultantCreate)
-    def create_consultant(self):
-        return self.__create_user(Role.CONSULTANT)
+    @Auth.permission_required(Permission.UserServiceEngineerCreate)
+    def create_service_engineer(self):
+        return self.__create_user(Role.SERVICE_ENGINEER)
 
     def __create_user(self, role: Role):
 
-        header = "Consultant" if role.CONSULTANT else "Systeem beheerder"
+        header = "Service Engineer" if role.SERVICE_ENGINEER else "Systeem beheerder"
 
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert(text=f"{header} toevoegen", color=Color.HEADER))
@@ -203,8 +205,8 @@ class UserController:
 
         user.registrationDate = datetime.now().strftime("%d-%m-%Y")
 
-        if user.role == Role.CONSULTANT.name:
-            LogRepository.log(LogType.UserConsultantCreated, f"id: {user.id} username: {user.username}")
+        if user.role == Role.SERVICE_ENGINEER.name:
+            LogRepository.log(LogType.UserServiceEngineerCreated, f"id: {user.id} username: {user.username}")
 
         if user.role == Role.SYSTEM_ADMIN.name:
             LogRepository.log(LogType.UserSystemAdminCreated, f"id: {user.id} username: {user.username}")
@@ -223,8 +225,8 @@ class UserController:
         pw_ui.add(UserInterfacePrompt("Druk op enter om door te gaan", memory_key="action"))
         pw_ui.run()
 
-    @Auth.permission_required(Permission.UserConsultantUpdate)
-    def update_consultant_user(self, user: User):
+    @Auth.permission_required(Permission.UserServiceEngineerUpdate)
+    def update_service_engineer_user(self, user: User):
         return self.update_user(user)
 
     @Auth.permission_required(Permission.UserSystemAdminUpdate)
@@ -232,7 +234,7 @@ class UserController:
         return self.update_user(user)
 
     def update_user(self, user: User):
-        header = "Consultant" if user.role == Role.CONSULTANT.name else "Systeem beheerder"
+        header = "Service Engineer" if user.role == Role.SERVICE_ENGINEER.name else "Systeem beheerder"
 
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert(text=header + " " + user.firstName + " " + user.lastName + " wijzigen",
@@ -247,8 +249,8 @@ class UserController:
 
         UserRepository.update_user(user)
 
-        if user.role == Role.CONSULTANT.name:
-            LogRepository.log(LogType.UserConsultantUpdated, f"id: {user.id} username: {user.username}")
+        if user.role == Role.SERVICE_ENGINEER.name:
+            LogRepository.log(LogType.UserServiceEngineerUpdated, f"id: {user.id} username: {user.username}")
 
         if user.role == Role.SYSTEM_ADMIN.name:
             LogRepository.log(LogType.UserSystemAdminUpdated, f"id: {user.id} username: {user.username}")
@@ -260,8 +262,8 @@ class UserController:
             2
         )
 
-    @Auth.permission_required(Permission.UserConsultantDelete)
-    def delete_consultant_user(self, user: User):
+    @Auth.permission_required(Permission.UserServiceEngineerDelete)
+    def delete_service_engineer_user(self, user: User):
         return self.delete_user(user)
 
     @Auth.permission_required(Permission.UserSystemAdminDelete)
@@ -271,8 +273,8 @@ class UserController:
     def delete_user(self, user: User):
         UserRepository.delete_user(user)
 
-        if user.role == Role.CONSULTANT.name:
-            LogRepository.log(LogType.UserConsultantDeleted, f"username: {user.username}")
+        if user.role == Role.SERVICE_ENGINEER.name:
+            LogRepository.log(LogType.UserServiceEngineerDeleted, f"username: {user.username}")
 
         if user.role == Role.SYSTEM_ADMIN.name:
             LogRepository.log(LogType.UserSystemAdminDeleted, f"username: {user.username}")
@@ -284,8 +286,8 @@ class UserController:
             2
         )
 
-    @Auth.permission_required(Permission.UserConsultantResetPassword)
-    def reset_consultant_user(self, user: User):
+    @Auth.permission_required(Permission.UserServiceEngineerResetPassword)
+    def reset_service_engineer_user(self, user: User):
         return self.reset_password(user)
 
     @Auth.permission_required(Permission.UserSystemAdminResetPassword)
@@ -335,16 +337,16 @@ class UserController:
             2
         )
 
-    @Auth.permission_required(Permission.UserConsultantRead)
-    def search_consultant_user(self):
-        return self.search_users(Role.CONSULTANT)
+    @Auth.permission_required(Permission.UserServiceEngineerRead)
+    def search_service_engineer_user(self):
+        return self.search_users(Role.SERVICE_ENGINEER)
 
     @Auth.permission_required(Permission.UserSystemAdminRead)
     def search_system_admin_user(self):
         return self.search_users(Role.SYSTEM_ADMIN)
 
     def search_users(self, role: Role):
-        LogRepository.log(LogType.MembersRead)
+        LogRepository.log(LogType.TravellersRead)
 
         query_ui = UserInterfaceFlow()
         query_ui.add(UserInterfacePrompt(
@@ -362,12 +364,14 @@ class UserController:
                 UserInterfaceAlert("Geen resultaten gevonden", Color.FAIL),
                 2
             )
-            if role == Role.CONSULTANT:
-                return self.list_consultant_users()
+            if role == Role.SERVICE_ENGINEER:
+                return self.list_service_engineer_users()
             if role == Role.SYSTEM_ADMIN:
                 return self.list_system_admin_users()
 
-        if role == Role.CONSULTANT:
-            return self.list_consultant_users(users)
+        if role == Role.SERVICE_ENGINEER:
+            return self.list_service_engineer_users(users)
         if role == Role.SYSTEM_ADMIN:
             return self.list_system_admin_users(users)
+
+        return None

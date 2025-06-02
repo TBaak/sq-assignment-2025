@@ -1,10 +1,10 @@
 from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
 from Enum.LogType import LogType
-from Form.MemberForm import MemberForm
-from Models.Member import Member
+from Form.TravellerForm import TravellerForm
+from Models.Traveller import Traveller
 from Repository.LogRepository import LogRepository
-from Repository.MemberRepository import MemberRepository
+from Repository.TravellerRepository import TravellerRepository
 from Security.AuthorizationDecorator import Auth
 from Security.Enum.Permission import Permission
 from Service.IndexService import IndexService
@@ -18,22 +18,22 @@ from View.Validations.NumberValdation import NumberValidation
 from View.Validations.OnlyLetterValdation import OnlyLetterValidation
 
 
-class MemberController:
+class TravellerController:
 
-    @Auth.permission_required(Permission.MemberRead)
-    def list_members(self, members: list[Member] = None):
+    @Auth.permission_required(Permission.TravellerRead)
+    def list_travellers(self, travellers: list[Traveller] = None):
 
         UserInterfaceFlow.quick_run_till_next(
-            UserInterfaceAlert("Member overzicht aan het laden...", Color.HEADER)
+            UserInterfaceAlert("Traveller overzicht aan het laden...", Color.HEADER)
         )
 
-        LogRepository.log(LogType.MembersRead)
+        LogRepository.log(LogType.TravellersRead)
 
-        if members is None:
-            members = MemberRepository.find_all()
+        if travellers is None:
+            travellers = TravellerRepository.find_all()
 
-        rows = map(lambda m: [m.number, m.firstName, m.lastName, m.age, m.emailAddress,
-                              m.streetName + " " + m.houseNumber], members)
+        rows = map(lambda m: [m.number, m.first_name, m.last_name, m.age, m.email,
+                              m.street_name + " " + m.house_number], travellers)
         rows = list(rows)
 
         for index, row in enumerate(rows):
@@ -42,10 +42,10 @@ class MemberController:
         rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
 
         rows.insert(0, UserInterfaceTableRow(
-            ["#", "Member nummer", "Voornaam", "Achternaam", "Leeftijd", "E-mailadres", "Adres"]))
+            ["#", "Traveller nummer", "Voornaam", "Achternaam", "Leeftijd", "E-mailadres", "Adres"]))
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert("Member overzicht" if members is None else "Zoekresultaten", Color.HEADER))
+        ui.add(UserInterfaceAlert("Traveller overzicht" if travellers is None else "Zoekresultaten", Color.HEADER))
         ui.add(UserInterfaceTable(rows=rows, has_header=True))
         ui.add(UserInterfacePrompt(
             prompt_text="Geef het nummer om te bekijken of druk op Z om te zoeken of druk op ENTER om terug te gaan",
@@ -60,29 +60,29 @@ class MemberController:
             return
 
         if selected.upper() == "Z":
-            return self.search_members()
+            return self.search_travellers()
 
         if selected.isdigit() is False:
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
             )
-            return self.list_members()
+            return self.list_travellers()
 
         member_index = int(selected) - 1
 
         try:
-            self.show_member(members[member_index])
+            self.show_traveller(travellers[member_index])
         except IndexError:
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
             )
 
-    @Auth.permission_required(Permission.MemberRead)
-    def search_members(self):
+    @Auth.permission_required(Permission.TravellerRead)
+    def search_travellers(self):
 
-        LogRepository.log(LogType.MembersRead)
+        LogRepository.log(LogType.TravellersRead)
 
         query_ui = UserInterfaceFlow()
         query_ui.add(UserInterfacePrompt(
@@ -93,41 +93,41 @@ class MemberController:
         )
         query = query_ui.run()['query']
 
-        members = MemberRepository.find_by_query(query)
+        members = TravellerRepository.find_by_query(query)
 
         if len(members) == 0:
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Geen resultaten gevonden", Color.FAIL),
                 2
             )
-            return self.list_members()
+            return self.list_travellers()
 
-        return self.list_members(members)
+        return self.list_travellers(members)
 
-    @Auth.permission_required(Permission.MemberRead)
-    def show_member(self, member: Member):
+    @Auth.permission_required(Permission.TravellerRead)
+    def show_traveller(self, member: Traveller):
 
-        LogRepository.log(LogType.MemberRead)
+        LogRepository.log(LogType.TravellerRead)
 
         rows = [
             UserInterfaceTableRow(["Nummer", member.number]),
-            UserInterfaceTableRow(["Voornaam", member.firstName]),
-            UserInterfaceTableRow(["Achternaam", member.lastName]),
+            UserInterfaceTableRow(["Voornaam", member.first_name]),
+            UserInterfaceTableRow(["Achternaam", member.last_name]),
             UserInterfaceTableRow(["Leeftijd", member.age]),
             UserInterfaceTableRow(["Gewicht", member.weight]),
 
             UserInterfaceTableRow(["Geslacht", member.gender.upper()]),
-            UserInterfaceTableRow(["E-mailadres", member.emailAddress]),
+            UserInterfaceTableRow(["E-mailadres", member.email]),
 
-            UserInterfaceTableRow(["Telefoonnummer", member.phoneNumber]),
-            UserInterfaceTableRow(["Straatnaam", member.streetName]),
-            UserInterfaceTableRow(["Huisnummer", member.houseNumber]),
-            UserInterfaceTableRow(["Postcode", member.zipCode]),
+            UserInterfaceTableRow(["Telefoonnummer", member.phone]),
+            UserInterfaceTableRow(["Straatnaam", member.street_name]),
+            UserInterfaceTableRow(["Huisnummer", member.house_number]),
+            UserInterfaceTableRow(["Postcode", member.zip_code]),
             UserInterfaceTableRow(["Stad", member.city])
         ]
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert("Member " + member.firstName + " " + member.lastName, Color.HEADER))
+        ui.add(UserInterfaceAlert("Member " + member.first_name + " " + member.last_name, Color.HEADER))
         ui.add(UserInterfaceTable(rows))
         ui.add(UserInterfacePrompt(
             prompt_text="Druk op W om te wijzigingen of druk D om te verwijderen of druk op enter om terug te gaan",
@@ -144,29 +144,29 @@ class MemberController:
             return
 
         if selected.upper() == "W":
-            self.update_member(member)
+            self.update_traveller(member)
 
         elif selected.upper() == "D":
-            self.delete_member(member)
+            self.delete_traveller(member)
 
-        self.list_members()
+        self.list_travellers()
 
-    @Auth.permission_required(Permission.MemberCreate)
-    def add_member(self):
+    @Auth.permission_required(Permission.TravellerCreate)
+    def add_traveller(self):
 
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert(text="Member toevoegen", color=Color.HEADER))
 
-        ui = MemberForm.get_form(ui, None)
+        ui = TravellerForm.get_form(ui, None)
 
         fields = ui.run()
 
-        member = Member()
+        member = Traveller()
         member.populate(list(fields.values()), list(fields.keys()))
 
-        LogRepository.log(LogType.MemberCreated, f"id: {member.id} name: {member.firstName} {member.lastName}")
+        LogRepository.log(LogType.TravellerCreated, f"id: {member.id} name: {member.first_name} {member.last_name}")
 
-        MemberRepository.persist_member(member)
+        TravellerRepository.persist_traveller(member)
 
         IndexService.index_database()
 
@@ -175,23 +175,23 @@ class MemberController:
             2
         )
 
-    @Auth.permission_required(Permission.MemberUpdate)
-    def update_member(self, member: Member):
+    @Auth.permission_required(Permission.TravellerUpdate)
+    def update_traveller(self, member: Traveller):
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert(text="Member " + member.firstName + " " + member.lastName + " wijziging",
+        ui.add(UserInterfaceAlert(text="Member " + member.first_name + " " + member.last_name + " wijziging",
                                   color=Color.OKBLUE))
         ui.add(UserInterfaceAlert(text=f"Druk op enter om waarde niet te wijzigingen", color=Color.OKCYAN))
 
-        ui = MemberForm.get_form(ui, member)
+        ui = TravellerForm.get_form(ui, member)
 
         fields = ui.run()
 
         member.populate(list(fields.values()), list(fields.keys()))
 
-        MemberRepository.update_member(member)
+        TravellerRepository.update_traveller(member)
 
-        LogRepository.log(LogType.MemberUpdated, f"id: {member.id} name: {member.firstName} {member.lastName}")
+        LogRepository.log(LogType.TravellerUpdated, f"id: {member.id} name: {member.first_name} {member.last_name}")
 
         IndexService.index_database()
 
@@ -200,12 +200,12 @@ class MemberController:
             2
         )
 
-    @Auth.permission_required(Permission.MemberDelete)
-    def delete_member(self, member: Member):
+    @Auth.permission_required(Permission.TravellerDelete)
+    def delete_traveller(self, member: Traveller):
 
-        MemberRepository.delete_member(member)
+        TravellerRepository.delete_traveller(member)
 
-        LogRepository.log(LogType.MemberDeleted, f"name: {member.firstName} {member.lastName}")
+        LogRepository.log(LogType.TravellerDeleted, f"name: {member.first_name} {member.last_name}")
 
         IndexService.index_database()
 

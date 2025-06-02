@@ -12,7 +12,7 @@ from View.UserInterfaceFlow import UserInterfaceFlow
 
 def main():
 
-    UserInterfaceFlow.quick_run(UserInterfaceAlert("-= Welkom in het User Management systeem van Unique Meal =-", Color.HEADER), 1)
+    UserInterfaceFlow.quick_run(UserInterfaceAlert("-= Welkom in het management systeem van Urban Mobility =-", Color.HEADER), 1)
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[ ] Keys initialiseren..."), 0)
 
@@ -31,14 +31,6 @@ def main():
     IndexService.index_database()
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database geïndexeerd ", Color.OKGREEN), 0)
-
-    # NOTE: Devs run any test and seeds from this point
-
-    # DatabaseSeeder.users()
-    # exit(0)
-    # CreateMemberTest.run()
-    # CreateConsultantTest.run(uname="consultant", pword="admin")
-    # exit(0)
 
     lc = LoginController()
     lc.login()

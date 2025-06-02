@@ -11,6 +11,8 @@ from View.UserInterfaceFlowItem import UserInterfaceFlowItem
 
 class UserInterfacePrompt(UserInterfaceFlowItem):
 
+    # Add domain validation
+
     def __init__(self, prompt_text: str, memory_key: str = "default", validations=None, is_password: bool = False,
                  value: str = None):
         if validations is None:

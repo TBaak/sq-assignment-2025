@@ -12,25 +12,25 @@ class DatabaseConfiguration:
     def start():
         db = DBRepository.create_connection()
 
-        DatabaseConfiguration.__table_member(db)
+        DatabaseConfiguration.__table_traveller(db)
         DatabaseConfiguration.__table_user(db)
 
         db.close()
 
     @staticmethod
-    def __table_member(db: Connection):
+    def __table_traveller(db: Connection):
 
-        ConsoleLogger.v("Creating member table if not exist")
+        ConsoleLogger.v("Creating traveller table if not exist")
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        with open(dir_path + '/DatabaseScripts/CreateMemberTable.sql', 'r') as sql_file:
+        with open(dir_path + '/DatabaseScripts/CreateTravellerTable.sql', 'r') as sql_file:
             sql_script = sql_file.read()
 
         cursor = db.cursor()
         cursor.executescript(sql_script)
         cursor.close()
 
-        ConsoleLogger.v("Member table created")
+        ConsoleLogger.v("Traveller table created")
 
         db.commit()
 

@@ -2,16 +2,16 @@ from enum import Enum
 
 
 class Permission(Enum):
-    MemberCreate = "member_create"
-    MemberRead = "member_read"
-    MemberUpdate = "member_update"
-    MemberDelete = "member_delete"
+    TravellerCreate = "traveller_create"
+    TravellerRead = "traveller_read"
+    TravellerUpdate = "traveller_update"
+    TravellerDelete = "traveller_delete"
 
-    UserConsultantCreate = "user_consultant_create"
-    UserConsultantRead = "user_consultant_read"
-    UserConsultantUpdate = "user_consultant_update"
-    UserConsultantDelete = "user_consultant_delete"
-    UserConsultantResetPassword = "user_consultant_reset_password"
+    UserServiceEngineerCreate = "user_service_engineer_create"
+    UserServiceEngineerRead = "user_service_engineer_read"
+    UserServiceEngineerUpdate = "user_service_engineer_update"
+    UserServiceEngineerDelete = "user_service_engineer_delete"
+    UserServiceEngineerResetPassword = "user_service_engineer_reset_password"
 
     UserSystemAdminCreate = "user_system_admin_create"
     UserSystemAdminRead = "user_system_admin_read"

@@ -5,16 +5,16 @@ from Security.Enum.Permission import Permission
 
 class Role(Enum):
     SUPER_ADMIN = [
-        Permission.MemberCreate.value,
-        Permission.MemberRead.value,
-        Permission.MemberUpdate.value,
-        Permission.MemberDelete.value,
+        Permission.TravellerCreate.value,
+        Permission.TravellerRead.value,
+        Permission.TravellerUpdate.value,
+        Permission.TravellerDelete.value,
 
-        Permission.UserConsultantCreate.value,
-        Permission.UserConsultantRead.value,
-        Permission.UserConsultantUpdate.value,
-        Permission.UserConsultantDelete.value,
-        Permission.UserConsultantResetPassword.value,
+        Permission.UserServiceEngineerCreate.value,
+        Permission.UserServiceEngineerRead.value,
+        Permission.UserServiceEngineerUpdate.value,
+        Permission.UserServiceEngineerDelete.value,
+        Permission.UserServiceEngineerResetPassword.value,
 
         Permission.UserSystemAdminCreate.value,
         Permission.UserSystemAdminRead.value,
@@ -30,16 +30,16 @@ class Role(Enum):
         Permission.LogRead.value,
     ]
     SYSTEM_ADMIN = [
-        Permission.MemberCreate.value,
-        Permission.MemberRead.value,
-        Permission.MemberUpdate.value,
-        Permission.MemberDelete.value,
+        Permission.TravellerCreate.value,
+        Permission.TravellerRead.value,
+        Permission.TravellerUpdate.value,
+        Permission.TravellerDelete.value,
 
-        Permission.UserConsultantCreate.value,
-        Permission.UserConsultantRead.value,
-        Permission.UserConsultantUpdate.value,
-        Permission.UserConsultantDelete.value,
-        Permission.UserConsultantResetPassword.value,
+        Permission.UserServiceEngineerCreate.value,
+        Permission.UserServiceEngineerRead.value,
+        Permission.UserServiceEngineerUpdate.value,
+        Permission.UserServiceEngineerDelete.value,
+        Permission.UserServiceEngineerResetPassword.value,
 
         Permission.UserUpdateOwnPassword.value,
 
@@ -48,10 +48,10 @@ class Role(Enum):
 
         Permission.LogRead.value,
     ]
-    CONSULTANT = [
-        Permission.MemberCreate.value,
-        Permission.MemberRead.value,
-        Permission.MemberUpdate.value,
+    SERVICE_ENGINEER = [
+        Permission.TravellerCreate.value,
+        Permission.TravellerRead.value,
+        Permission.TravellerUpdate.value,
 
         Permission.UserUpdateOwnPassword.value,
     ]
