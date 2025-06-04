@@ -4,7 +4,7 @@ from Models.BaseClasses.SerializeableModel import SerializeableModel
 
 
 class User(EncryptableModel, DatabaseModel, SerializeableModel):
-    ENCRYPTED_FIELDS = ['username', 'password', 'role', 'firstName', 'lastName', 'registrationDate']
+    ENCRYPTED_FIELDS = ['username', 'password', 'role', 'firstName', 'lastName', 'registration_date']
 
     id: int = None
     username: str = None
@@ -12,4 +12,4 @@ class User(EncryptableModel, DatabaseModel, SerializeableModel):
     role: str = None
     firstName: str = None
     lastName: str = None
-    registrationDate: str = None  # String because this works easier with encryption
+    registration_date: str = None  # String because this works easier with encryption

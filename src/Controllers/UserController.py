@@ -55,7 +55,7 @@ class UserController:
         if users is None:
             users = UserRepository.find_all_by_role(role)
 
-        rows = map(lambda u: [u.username, u.first_name, u.last_name, u.registrationDate], users)
+        rows = map(lambda u: [u.username, u.first_name, u.last_name, u.registration_date], users)
         rows = list(rows)
 
         for index, row in enumerate(rows):
@@ -126,7 +126,7 @@ class UserController:
             UserInterfaceTableRow(["Username", user.username]),
             UserInterfaceTableRow(["Voornaam", user.firstName]),
             UserInterfaceTableRow(["Achternaam", user.lastName]),
-            UserInterfaceTableRow(["Registratie datum", user.registrationDate]),
+            UserInterfaceTableRow(["Registratie datum", user.registration_date]),
 
             UserInterfaceTableRow(["Rol", "Service Engineer" if user.role == Role.SERVICE_ENGINEER else "Systeem beheerder"])
         ]
@@ -203,7 +203,7 @@ class UserController:
 
         user.role = role.name
 
-        user.registrationDate = datetime.now().strftime("%d-%m-%Y")
+        user.registration_date = datetime.now().strftime("%d-%m-%Y")
 
         if user.role == Role.SERVICE_ENGINEER.name:
             LogRepository.log(LogType.UserServiceEngineerCreated, f"id: {user.id} username: {user.username}")

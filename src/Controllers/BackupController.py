@@ -56,7 +56,7 @@ class BackupController:
         backup_folder = selected_backup.split(".")[0]
         shutil.unpack_archive(f"Backups/{selected_backup}", backup_folder)
 
-        db_file = DBRepository.dbFilename
+        db_file = DBRepository.db_filename
         log_file = LogRepository.logFilename
 
         shutil.copy(f"{backup_folder}/{log_file}", log_file)
@@ -80,7 +80,7 @@ class BackupController:
 
     @Auth.permission_required(Permission.BackupCreate)
     def create_backup(self):
-        db_file = DBRepository.dbFilename
+        db_file = DBRepository.db_filename
         log_file = LogRepository.logFilename
 
         backup_folder = "backup_" + datetime.now().strftime("%H.%M.%S_%d-%m-%Y")

@@ -21,7 +21,7 @@ class UserRepository:
         if ids is None:
             ids = IndexService.find_user_by_role(role)
 
-        cursor.execute('SELECT id, username, password, role, firstName, lastName, registrationDate FROM user '
+        cursor.execute('SELECT id, username, password, role, firstName, lastName, registration_date FROM user '
                        'WHERE id IN (%s)' % ','.join('?' * len(ids)), ids)
 
         result = cursor.fetchall()
@@ -33,7 +33,7 @@ class UserRepository:
 
         for userData in result:
             user = User(is_encrypted=True)
-            user.populate(userData, ['id', 'username', 'password', 'role', 'firstName', 'lastName', 'registrationDate'])
+            user.populate(userData, ['id', 'username', 'password', 'role', 'firstName', 'lastName', 'registration_date'])
             user.decrypt()
             users.append(user)
 
@@ -78,14 +78,14 @@ class UserRepository:
             "role,"
             "username,"
             "password,"
-            "registrationDate"
+            "registration_date"
             ") VALUES ("
             ":firstName,"
             ":lastName,"
             ":role,"
             ":username,"
             ":password,"
-            ":registrationDate"
+            ":registration_date"
             ");",
             user.serialize()
         )

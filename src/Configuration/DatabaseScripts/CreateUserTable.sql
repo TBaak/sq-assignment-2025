@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS users(
     role TEXT NOT NULL,
     firstName TEXT NOT NULL,
     lastName TEXT NOT NULL,
-    registrationDate TEXT NOT NULL
+    registration_date TEXT NOT NULL
 )
