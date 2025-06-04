@@ -2,7 +2,6 @@ from datetime import datetime
 
 from Enum.Color import Color
 from Enum.LogType import LogType
-from Enum.UserType import UserType
 from Form.UserForm import UserForm
 from Form.UserPasswordForm import UserPasswordForm
 from Models.User import User
@@ -79,7 +78,7 @@ class UserController:
         selected = selection["action"]
 
         if selected == "":
-            return
+            return None
 
         if selected.upper() == "Z":
             if role == Role.SERVICE_ENGINEER:
@@ -96,7 +95,7 @@ class UserController:
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
             )
-            return
+            return None
 
         if role == Role.SYSTEM_ADMIN:
             self.show_system_admin_user(selected_user)
@@ -185,7 +184,7 @@ class UserController:
 
     def __create_user(self, role: Role):
 
-        header = "Service Engineer" if role.SERVICE_ENGINEER else "Systeem beheerder"
+        header = "Service Engineer" if role == role.SERVICE_ENGINEER else "Systeem beheerder"
 
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert(text=f"{header} toevoegen", color=Color.HEADER))
@@ -199,7 +198,7 @@ class UserController:
 
         plain_pw = UserRepository.generate_valid_password()
 
-        user.password = HashService.hash(plain_pw).decode()
+        user.password = HashService.hash(plain_pw)
 
         user.role = role.name
 
@@ -298,7 +297,7 @@ class UserController:
 
         plain_pw = UserRepository.generate_valid_password()
 
-        user.password = HashService.hash(plain_pw).decode()
+        user.password = HashService.hash(plain_pw)
 
         UserRepository.update_user_password(user)
 
@@ -324,7 +323,7 @@ class UserController:
 
         fields = ui.run()
 
-        user.password = HashService.hash(fields["password"]).decode()
+        user.password = HashService.hash(fields["password"])
 
         UserRepository.update_user_password(user)
 

@@ -49,9 +49,5 @@ class Role(Enum):
         Permission.LogRead.value,
     ]
     SERVICE_ENGINEER = [
-        Permission.TravellerCreate.value,
-        Permission.TravellerRead.value,
-        Permission.TravellerUpdate.value,
-
         Permission.UserUpdateOwnPassword.value,
     ]

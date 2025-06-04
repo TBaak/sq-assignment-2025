@@ -6,12 +6,12 @@ class HashService:
     # TODO: Add manual salt as described in the lessons
 
     @staticmethod
-    def hash(input: str) -> bytes:
-        inputBytes = input.encode()
+    def hash(plain: str) -> str:
+        input_bytes = plain.encode()
         salt = bcrypt.gensalt()
-        hashed = bcrypt.hashpw(inputBytes, salt)
+        hashed = bcrypt.hashpw(input_bytes, salt)
 
-        return hashed
+        return hashed.decode()
 
     @staticmethod
     def verify_password(a, b):

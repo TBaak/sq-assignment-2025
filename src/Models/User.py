@@ -8,7 +8,7 @@ class User(EncryptableModel, DatabaseModel, SerializeableModel):
 
     id: int = None
     username: str = None
-    password: bytes = None
+    password: str = None
     role: str = None
     firstName: str = None
     lastName: str = None

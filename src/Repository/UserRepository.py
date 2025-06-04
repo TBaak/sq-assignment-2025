@@ -21,7 +21,7 @@ class UserRepository:
         if ids is None:
             ids = IndexService.find_user_by_role(role)
 
-        cursor.execute('SELECT id, username, password, role, firstName, lastName, registration_date FROM user '
+        cursor.execute('SELECT id, username, password, role, firstName, lastName, registration_date FROM users '
                        'WHERE id IN (%s)' % ','.join('?' * len(ids)), ids)
 
         result = cursor.fetchall()
@@ -50,7 +50,7 @@ class UserRepository:
             return None, LoginError.NotFound
 
         foundUser = cursor.execute(
-            "SELECT id, username, password, role FROM user WHERE id = :user_id", {"user_id": user_id}
+            "SELECT id, username, password, role FROM users WHERE id = :user_id", {"user_id": user_id}
         )
 
         userValues = foundUser.fetchone()
@@ -72,7 +72,7 @@ class UserRepository:
         user.encrypt()
 
         cursor.execute(
-            "INSERT INTO user ("
+            "INSERT INTO users ("
             "firstName,"
             "lastName,"
             "role,"
@@ -104,7 +104,7 @@ class UserRepository:
         user.encrypt()
 
         cursor.execute(
-            "UPDATE user SET "
+            "UPDATE users SET "
             "firstName = :firstName,"
             "lastName = :lastName,"
             "username = :username "
@@ -128,7 +128,7 @@ class UserRepository:
         user.encrypt()
 
         cursor.execute(
-            "UPDATE user SET "
+            "UPDATE users SET "
             "password = :password "
             "WHERE id = :id",
             user.serialize()
@@ -174,7 +174,7 @@ class UserRepository:
         cursor = db.cursor()
 
         cursor.execute(
-            "DELETE FROM user WHERE id = :id",
+            "DELETE FROM users WHERE id = :id",
             user.serialize()
         )
 
