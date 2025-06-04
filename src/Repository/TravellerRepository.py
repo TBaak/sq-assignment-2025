@@ -1,7 +1,6 @@
 import random
 from datetime import datetime
 
-from Debug.ConsoleLogger import ConsoleLogger
 from Models.Traveller import Traveller
 from Repository.BaseClasses.DBRepository import DBRepository
 from Service.IndexService import IndexService
@@ -89,7 +88,6 @@ class TravellerRepository:
             traveller.serialize()
         )
 
-        ConsoleLogger.vv("Created traveller: " + str(traveller.serialize()))
 
         db.commit()
 
@@ -120,7 +118,6 @@ class TravellerRepository:
             traveller.serialize()
         )
 
-        ConsoleLogger.vv("Updated traveller: " + str(traveller.serialize()))
 
         db.commit()
 
@@ -139,7 +136,6 @@ class TravellerRepository:
             traveller.serialize()
         )
 
-        ConsoleLogger.vv("Deleted traveller: " + str(traveller.id))
 
         db.commit()
 

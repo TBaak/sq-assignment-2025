@@ -1,4 +1,3 @@
-from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
 from Security.Enum.Permission import Permission
 from Security.Enum.Role import Role
@@ -14,14 +13,11 @@ class AuthorizationService:
         user = SecurityHelper.get_logged_in_user()
 
         if user is None:
-            ConsoleLogger.v("AuthorizationService.current_user_has_permission: No user logged in")
             return False
 
         if permission.value in Role[user.role].value:
-            ConsoleLogger.v(f"AuthorizationService.current_user_has_permission: User has permission '{permission}'")
             return True
 
-        ConsoleLogger.v(f"AuthorizationService.current_user_has_permission: User does NOT have permission '{permission}'")
         return False
 
     @staticmethod

@@ -1,7 +1,6 @@
 import base64
 from datetime import datetime
 
-from Debug.ConsoleLogger import ConsoleLogger
 from Enum.LogType import LogType
 from Security.SecurityHelper import SecurityHelper
 from Service.EncryptionService import EncryptionService
@@ -28,7 +27,6 @@ class LogRepository:
 
         log_line = f"{count + 1},{date},{time},{username},{log_type.value.message},{additional_message},{suspicous}"
 
-        ConsoleLogger.v(log_line)
 
         log_line_encrypted = EncryptionService.encrypt(log_line)
 

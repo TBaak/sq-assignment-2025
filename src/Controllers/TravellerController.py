@@ -1,4 +1,3 @@
-from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
 from Enum.LogType import LogType
 from Form.TravellerForm import TravellerForm

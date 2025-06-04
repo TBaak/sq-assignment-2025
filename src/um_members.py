@@ -2,7 +2,6 @@ import sys
 
 from Configuration.DatabaseConfiguration import DatabaseConfiguration
 from Controllers.LoginController import LoginController
-from Debug.ConsoleLogger import ConsoleLogger
 from Enum.Color import Color
 from Service.EncryptionService import EncryptionService
 from Service.IndexService import IndexService
@@ -37,15 +36,4 @@ def main():
 
 
 if __name__ == '__main__':
-
-    # DEBUG CONSOLE LOGGING
-    if len(sys.argv) > 1:
-        match sys.argv[1].lower():
-            case "-v":
-                ConsoleLogger.set_loglevel(1)
-            case "-vv":
-                ConsoleLogger.set_loglevel(2)
-            case "-vvv":
-                ConsoleLogger.set_loglevel(3)
-
     main()

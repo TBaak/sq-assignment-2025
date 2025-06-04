@@ -1,6 +1,5 @@
 from typing import Optional
 
-from Debug.ConsoleLogger import ConsoleLogger
 from Enum.IndexDomain import IndexDomain
 from Models.User import User
 from Repository.BaseClasses.DBRepository import DBRepository
@@ -13,7 +12,6 @@ class IndexService:
 
     @staticmethod
     def index_database():
-        ConsoleLogger.v("Indexing database")
 
         IndexService.index = {}
 
@@ -22,7 +20,6 @@ class IndexService:
         IndexService.__index_users()
         IndexService.__index_travellers()
 
-        ConsoleLogger.v("Database indexed")
 
         pass
 
@@ -89,7 +86,6 @@ class IndexService:
     @staticmethod
     def __index_users():
 
-        ConsoleLogger.v("Indexing users")
 
         conn = DBRepository.create_connection()
         cursor = conn.cursor()
@@ -119,12 +115,10 @@ class IndexService:
                 EncryptionService.decrypt(user[4])
             )
 
-        ConsoleLogger.v("Users indexed")
 
     @staticmethod
     def __index_travellers():
 
-        ConsoleLogger.v("Indexing Travellers")
 
         conn = DBRepository.create_connection()
         cursor = conn.cursor()
@@ -178,7 +172,6 @@ class IndexService:
                 EncryptionService.decrypt(user[8])
             )
 
-        ConsoleLogger.v("Travellers indexed")
 
     @staticmethod
     def __add_to_index(domain: IndexDomain, database_id: int, value: str):

@@ -3,7 +3,6 @@ import random
 from typing import Optional
 
 from DTO.LoginError import LoginError
-from Debug.ConsoleLogger import ConsoleLogger
 from Enum.UserType import UserType
 from Models.User import User
 from Repository.BaseClasses.DBRepository import DBRepository
@@ -91,7 +90,6 @@ class UserRepository:
             user.serialize()
         )
 
-        ConsoleLogger.vv("User member: " + str(user.serialize()))
 
         db.commit()
 
@@ -114,7 +112,6 @@ class UserRepository:
             user.serialize()
         )
 
-        ConsoleLogger.vv("Updated user: " + str(user.serialize()))
 
         db.commit()
 
@@ -136,8 +133,6 @@ class UserRepository:
             "WHERE id = :id",
             user.serialize()
         )
-
-        ConsoleLogger.vv("Updated user password: " + str(user.serialize()))
 
         db.commit()
 
@@ -183,7 +178,6 @@ class UserRepository:
             user.serialize()
         )
 
-        ConsoleLogger.vv("Deleted member: " + str(user.id))
 
         db.commit()
 
@@ -198,12 +192,12 @@ class UserRepository:
             if role == Role.SYSTEM_ADMIN:
                 return UserRepository.find_all_by_role(Role.SYSTEM_ADMIN)
 
-        member_ids = IndexService.find_user_by_query(query, role)
+        user_ids = IndexService.find_user_by_query(query, role)
 
-        if len(member_ids) == 0:
+        if len(user_ids) == 0:
             return []
 
         if role == Role.SERVICE_ENGINEER:
-            return UserRepository.find_all_by_role(Role.SERVICE_ENGINEER, member_ids)
+            return UserRepository.find_all_by_role(Role.SERVICE_ENGINEER, user_ids)
         if role == Role.SYSTEM_ADMIN:
-            return UserRepository.find_all_by_role(Role.SYSTEM_ADMIN, member_ids)
+            return UserRepository.find_all_by_role(Role.SYSTEM_ADMIN, user_ids)
