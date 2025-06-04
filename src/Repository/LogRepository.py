@@ -30,7 +30,7 @@ class LogRepository:
 
         log_line_encrypted = EncryptionService.encrypt(log_line)
 
-        log_file.write(base64.b64encode(log_line_encrypted).decode('utf-8') + "\n")
+        log_file.write(base64.b64encode(log_line_encrypted.encode()).decode('utf-8') + "\n")
         log_file.close()
 
     @staticmethod
@@ -40,7 +40,7 @@ class LogRepository:
         logs = []
 
         for line in log_file:
-            logs.append(EncryptionService.decrypt(base64.b64decode(line)))
+            logs.append(EncryptionService.decrypt(base64.b64decode(line).decode()))
 
         log_file.close()
 

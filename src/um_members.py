@@ -11,13 +11,8 @@ from View.UserInterfaceFlow import UserInterfaceFlow
 
 def main():
 
+
     UserInterfaceFlow.quick_run(UserInterfaceAlert("-= Welkom in het management systeem van Urban Mobility =-", Color.HEADER), 1)
-
-    UserInterfaceFlow.quick_run(UserInterfaceAlert("[ ] Keys initialiseren..."), 0)
-
-    EncryptionService.create_certificates_if_not_exist()
-
-    UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Keys geïnitialiseerd", Color.OKGREEN), 0)
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[ ] Database initialiseren..."), 0)
 
