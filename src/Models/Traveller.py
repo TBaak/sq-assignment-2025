@@ -31,8 +31,8 @@ class Traveller(EncryptableModel, DatabaseModel, SerializeableModel):
     driving_license_number: str = None
 
     # Traveller contact details
-    phone: str = None
-    email: str = None
+    phone_number: str = None
+    email_address: str = None
 
     # Traveller address
     street_name: str = None

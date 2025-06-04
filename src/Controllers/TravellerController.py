@@ -32,7 +32,7 @@ class TravellerController:
         if travellers is None:
             travellers = TravellerRepository.find_all()
 
-        rows = map(lambda m: [m.number, m.first_name, m.last_name, m.age, m.email,
+        rows = map(lambda m: [m.number, m.first_name, m.last_name, m.driving_license_number, m.email_address,
                               m.street_name + " " + m.house_number], travellers)
         rows = list(rows)
 
@@ -42,7 +42,7 @@ class TravellerController:
         rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
 
         rows.insert(0, UserInterfaceTableRow(
-            ["#", "Traveller nummer", "Voornaam", "Achternaam", "Leeftijd", "E-mailadres", "Adres"]))
+            ["#", "Traveller nummer", "Voornaam", "Achternaam", "Rijbewijs nummer", "E-mailadres", "Adres"]))
 
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert("Traveller overzicht" if travellers is None else "Zoekresultaten", Color.HEADER))
@@ -69,10 +69,10 @@ class TravellerController:
             )
             return self.list_travellers()
 
-        member_index = int(selected) - 1
+        traveller_index = int(selected) - 1
 
         try:
-            self.show_traveller(travellers[member_index])
+            self.show_traveller(travellers[traveller_index])
         except IndexError:
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
@@ -86,48 +86,48 @@ class TravellerController:
 
         query_ui = UserInterfaceFlow()
         query_ui.add(UserInterfacePrompt(
-            prompt_text="Zoeken op naam, leeftijd, e-mailadres, adres of member nummer",
+            prompt_text="Zoeken op naam, leeftijd, e-mailadres, adres of traveller nummer",
             memory_key="query",
             validations=[NoSpecialCharsValidation()]
         )
         )
         query = query_ui.run()['query']
 
-        members = TravellerRepository.find_by_query(query)
+        travellers = TravellerRepository.find_by_query(query)
 
-        if len(members) == 0:
+        if len(travellers) == 0:
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Geen resultaten gevonden", Color.FAIL),
                 2
             )
             return self.list_travellers()
 
-        return self.list_travellers(members)
+        return self.list_travellers(travellers)
 
     @Auth.permission_required(Permission.TravellerRead)
-    def show_traveller(self, member: Traveller):
+    def show_traveller(self, traveller: Traveller):
 
         LogRepository.log(LogType.TravellerRead)
 
         rows = [
-            UserInterfaceTableRow(["Nummer", member.number]),
-            UserInterfaceTableRow(["Voornaam", member.first_name]),
-            UserInterfaceTableRow(["Achternaam", member.last_name]),
-            UserInterfaceTableRow(["Leeftijd", member.age]),
-            UserInterfaceTableRow(["Gewicht", member.weight]),
+            UserInterfaceTableRow(["Nummer", traveller.number]),
+            UserInterfaceTableRow(["Voornaam", traveller.first_name]),
+            UserInterfaceTableRow(["Achternaam", traveller.last_name]),
+            UserInterfaceTableRow(["Geboorte datum", traveller.dob]),
 
-            UserInterfaceTableRow(["Geslacht", member.gender.upper()]),
-            UserInterfaceTableRow(["E-mailadres", member.email]),
+            UserInterfaceTableRow(["Geslacht", traveller.gender.upper()]),
+            UserInterfaceTableRow(["E-mailadres", traveller.email_address]),
+            UserInterfaceTableRow(["Rijbewijs nummer", traveller.driving_license_number]),
 
-            UserInterfaceTableRow(["Telefoonnummer", member.phone]),
-            UserInterfaceTableRow(["Straatnaam", member.street_name]),
-            UserInterfaceTableRow(["Huisnummer", member.house_number]),
-            UserInterfaceTableRow(["Postcode", member.zip_code]),
-            UserInterfaceTableRow(["Stad", member.city])
+            UserInterfaceTableRow(["Telefoonnummer", traveller.phone_number]),
+            UserInterfaceTableRow(["Straatnaam", traveller.street_name]),
+            UserInterfaceTableRow(["Huisnummer", traveller.house_number]),
+            UserInterfaceTableRow(["Postcode", traveller.zip_code]),
+            UserInterfaceTableRow(["Stad", traveller.city])
         ]
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert("Member " + member.first_name + " " + member.last_name, Color.HEADER))
+        ui.add(UserInterfaceAlert("Traveller " + traveller.first_name + " " + traveller.last_name, Color.HEADER))
         ui.add(UserInterfaceTable(rows))
         ui.add(UserInterfacePrompt(
             prompt_text="Druk op W om te wijzigingen of druk D om te verwijderen of druk op enter om terug te gaan",
@@ -144,10 +144,10 @@ class TravellerController:
             return
 
         if selected.upper() == "W":
-            self.update_traveller(member)
+            self.update_traveller(traveller)
 
         elif selected.upper() == "D":
-            self.delete_traveller(member)
+            self.delete_traveller(traveller)
 
         self.list_travellers()
 
@@ -155,61 +155,61 @@ class TravellerController:
     def add_traveller(self):
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert(text="Member toevoegen", color=Color.HEADER))
+        ui.add(UserInterfaceAlert(text="Traveller toevoegen", color=Color.HEADER))
 
         ui = TravellerForm.get_form(ui, None)
 
         fields = ui.run()
 
-        member = Traveller()
-        member.populate(list(fields.values()), list(fields.keys()))
+        traveller = Traveller()
+        traveller.populate(list(fields.values()), list(fields.keys()))
 
-        LogRepository.log(LogType.TravellerCreated, f"id: {member.id} name: {member.first_name} {member.last_name}")
+        LogRepository.log(LogType.TravellerCreated, f"id: {traveller.id} name: {traveller.first_name} {traveller.last_name}")
 
-        TravellerRepository.persist_traveller(member)
+        TravellerRepository.persist_traveller(traveller)
 
         IndexService.index_database()
 
         UserInterfaceFlow.quick_run(
-            UserInterfaceAlert("Member toegevoegd", Color.OKGREEN),
+            UserInterfaceAlert("Traveller toegevoegd", Color.OKGREEN),
             2
         )
 
     @Auth.permission_required(Permission.TravellerUpdate)
-    def update_traveller(self, member: Traveller):
+    def update_traveller(self, traveller: Traveller):
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert(text="Member " + member.first_name + " " + member.last_name + " wijziging",
+        ui.add(UserInterfaceAlert(text="Traveller " + traveller.first_name + " " + traveller.last_name + " wijziging",
                                   color=Color.OKBLUE))
         ui.add(UserInterfaceAlert(text=f"Druk op enter om waarde niet te wijzigingen", color=Color.OKCYAN))
 
-        ui = TravellerForm.get_form(ui, member)
+        ui = TravellerForm.get_form(ui, traveller)
 
         fields = ui.run()
 
-        member.populate(list(fields.values()), list(fields.keys()))
+        traveller.populate(list(fields.values()), list(fields.keys()))
 
-        TravellerRepository.update_traveller(member)
+        TravellerRepository.update_traveller(traveller)
 
-        LogRepository.log(LogType.TravellerUpdated, f"id: {member.id} name: {member.first_name} {member.last_name}")
+        LogRepository.log(LogType.TravellerUpdated, f"id: {traveller.id} name: {traveller.first_name} {traveller.last_name}")
 
         IndexService.index_database()
 
         UserInterfaceFlow.quick_run(
-            UserInterfaceAlert("Member geüpdatet", Color.OKGREEN),
+            UserInterfaceAlert("Traveller geüpdatet", Color.OKGREEN),
             2
         )
 
     @Auth.permission_required(Permission.TravellerDelete)
-    def delete_traveller(self, member: Traveller):
+    def delete_traveller(self, traveller: Traveller):
 
-        TravellerRepository.delete_traveller(member)
+        TravellerRepository.delete_traveller(traveller)
 
-        LogRepository.log(LogType.TravellerDeleted, f"name: {member.first_name} {member.last_name}")
+        LogRepository.log(LogType.TravellerDeleted, f"name: {traveller.first_name} {traveller.last_name}")
 
         IndexService.index_database()
 
         UserInterfaceFlow.quick_run(
-            UserInterfaceAlert("Member verwijderd", Color.OKGREEN),
+            UserInterfaceAlert("Traveller verwijderd", Color.OKGREEN),
             2
         )

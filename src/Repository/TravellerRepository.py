@@ -28,7 +28,7 @@ class TravellerRepository:
 
         for travellerData in result:
             traveller = Traveller(is_encrypted=True)
-            traveller.populate(travellerData, ['id', 'first_name', 'last_name', 'dob', 'gender', 'street_name',
+            traveller.populate(travellerData, ['id', 'first_name', 'last_name', 'street_name', 'dob',  'gender',
                                          'house_number', 'city', 'zip_code', 'email_address', 'phone_number', 'number', 'driving_license_number'])
             traveller.decrypt()
             travellers.append(traveller)
@@ -114,7 +114,7 @@ class TravellerRepository:
             "city = :city,"
             "zip_code = :zip_code,"
             "email_address = :email_address,"
-            "phone_number = :phoneNumber,"
+            "phone_number = :phone_number,"
             "driving_license_number = :driving_license_number "
             "WHERE id = :id",
             traveller.serialize()

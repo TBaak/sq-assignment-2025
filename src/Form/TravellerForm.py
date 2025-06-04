@@ -2,6 +2,7 @@ from typing import TypeVar
 
 from Enum.Color import Color
 from Form.BaseClasses.Form import Form
+from Models.Traveller import Traveller
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 from View.UserInterfacePrompt import UserInterfacePrompt
@@ -18,10 +19,8 @@ from View.Validations.ZipcodeValdation import ZipcodeValidation
 
 class TravellerForm(Form):
 
-    T = TypeVar("T")
-
     @staticmethod
-    def get_form(ui: UserInterfaceFlow, existing: T = None) -> UserInterfaceFlow:
+    def get_form(ui: UserInterfaceFlow, existing: Traveller = None) -> UserInterfaceFlow:
         ui.add(UserInterfaceAlert(text="Voer de gegevens in van de nieuwe traveller", color=Color.WHITE))
         ui.add(UserInterfacePrompt(
             prompt_text="Voornaam",
@@ -58,21 +57,21 @@ class TravellerForm(Form):
         ui.add(UserInterfacePrompt(
             prompt_text="E-mailadres",
             memory_key="email_address",
-            value=existing.emailAddress if existing else None,
+            value=existing.email_address if existing else None,
             validations=[NotBlankValidation(), EmailValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Telefoon nummer (+31-6-NNNNNNNN) +31-6-",
             memory_key="phone_number",
-            value=existing.phoneNumber if existing else None,
+            value=existing.phone_number if existing else None,
             validations=[NotBlankValidation(), OnlyNumberValidation(), LengthValidation(8)])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Rijbewijs nummer", # Format
-            memory_key="driving_licence_number",
-            value=existing.phoneNumber if existing else None,
+            memory_key="driving_license_number",
+            value=existing.driving_license_number if existing else None,
             validations=[NotBlankValidation(), OnlyNumberValidation(), LengthValidation(8)])
         )
 
@@ -83,21 +82,21 @@ class TravellerForm(Form):
         ui.add(UserInterfacePrompt(
             prompt_text="Straatnaam",
             memory_key="street_name",
-            value=existing.streetName if existing else None,
+            value=existing.street_name if existing else None,
             validations=[NotBlankValidation(), OnlyLetterValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Huisnummer",
             memory_key="house_number",
-            value=existing.houseNumber if existing else None,
+            value=existing.house_number if existing else None,
             validations=[NotBlankValidation(), NumberValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Postcode (XXXXAB)",
             memory_key="zip_code",
-            value=existing.zipCode if existing else None,
+            value=existing.zip_code if existing else None,
             validations=[NotBlankValidation(), ZipcodeValidation()])
         )
 
