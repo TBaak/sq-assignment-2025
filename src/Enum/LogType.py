@@ -29,6 +29,8 @@ class LogType(Enum):
     UnsuccessfulLogin = LogTypeDTO("Unsuccessful login")
     UnsuccessfulLoginSuspicious = LogTypeDTO("Unsuccessful login", True)
 
+    NullByteInput = LogTypeDTO("Null byte input", True)
+
     PasswordReset = LogTypeDTO("Password reset")
     OwnPasswordUpdated = LogTypeDTO("Own password is updated")
 

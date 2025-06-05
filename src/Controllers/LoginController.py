@@ -11,7 +11,7 @@ from Service.HashService import HashService
 from View.UserInterfaceAlert import UserInterfaceAlert
 from View.UserInterfaceFlow import UserInterfaceFlow
 from View.UserInterfacePrompt import UserInterfacePrompt
-from View.Validations.NotBlankValdation import NotBlankValidation
+from View.Validations.NotBlankValidation import NotBlankValidation
 
 
 class LoginController:

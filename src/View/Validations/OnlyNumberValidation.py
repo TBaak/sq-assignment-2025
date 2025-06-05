@@ -1,11 +1,11 @@
 from View.Validations.Validation import Validation
 
 
-class GenderValidation(Validation):
+class OnlyNumberValidation(Validation):
 
     @staticmethod
     def validate(value: str) -> tuple[bool, str]:
-        if value.lower() in ["m", "v", "x"]:
+        if value.isdigit():
             return True, ""
 
-        return False, "Deze waarde moet m, v of x zijn"
+        return False, "Deze waarde mag alleen cijfers bevatten"

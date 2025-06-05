@@ -10,8 +10,6 @@ from View.UserInterfaceFlow import UserInterfaceFlow
 
 
 def main():
-
-
     UserInterfaceFlow.quick_run(UserInterfaceAlert("-= Welkom in het management systeem van Urban Mobility =-", Color.HEADER), 1)
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[ ] Database initialiseren..."), 0)

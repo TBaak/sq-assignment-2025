@@ -13,8 +13,8 @@ from View.UserInterfacePrompt import UserInterfacePrompt
 from View.UserInterfaceTable import UserInterfaceTable
 from View.UserInterfaceTableRow import UserInterfaceTableRow
 from View.Validations.NoSpecialCharsValidation import NoSpecialCharsValidation
-from View.Validations.NumberValdation import NumberValidation
-from View.Validations.OnlyLetterValdation import OnlyLetterValidation
+from View.Validations.NumberValidation import NumberValidation
+from View.Validations.OnlyLetterValidation import OnlyLetterValidation
 
 
 class TravellerController:
