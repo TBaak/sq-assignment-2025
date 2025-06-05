@@ -123,15 +123,15 @@ class UserController:
 
         rows = [
             UserInterfaceTableRow(["Username", user.username]),
-            UserInterfaceTableRow(["Voornaam", user.firstName]),
-            UserInterfaceTableRow(["Achternaam", user.lastName]),
+            UserInterfaceTableRow(["Voornaam", user.first_name]),
+            UserInterfaceTableRow(["Achternaam", user.last_name]),
             UserInterfaceTableRow(["Registratie datum", user.registration_date]),
 
             UserInterfaceTableRow(["Rol", "Service Engineer" if user.role == Role.SERVICE_ENGINEER else "Systeem beheerder"])
         ]
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert("Gebruiker " + user.firstName + " " + user.lastName, Color.HEADER))
+        ui.add(UserInterfaceAlert("Gebruiker " + user.first_name + " " + user.last_name, Color.HEADER))
         ui.add(UserInterfaceTable(rows))
         ui.add(UserInterfacePrompt(
             prompt_text="Druk op W om te wijzigingen of druk D om te verwijderen of druk R om te resetten of druk op "
@@ -236,7 +236,7 @@ class UserController:
         header = "Service Engineer" if user.role == Role.SERVICE_ENGINEER.name else "Systeem beheerder"
 
         ui = UserInterfaceFlow()
-        ui.add(UserInterfaceAlert(text=header + " " + user.firstName + " " + user.lastName + " wijzigen",
+        ui.add(UserInterfaceAlert(text=header + " " + user.first_name + " " + user.last_name + " wijzigen",
                                   color=Color.HEADER))
         ui.add(UserInterfaceAlert(text=f"Druk op enter om waarde niet te wijzigingen", color=Color.OKCYAN))
 
@@ -284,6 +284,8 @@ class UserController:
             UserInterfaceAlert("User verwijderd", Color.OKGREEN),
             2
         )
+
+        # TODO: Fix returning to old overview
 
     @Auth.permission_required(Permission.UserServiceEngineerResetPassword)
     def reset_service_engineer_user(self, user: User):

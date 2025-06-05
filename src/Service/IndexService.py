@@ -90,7 +90,7 @@ class IndexService:
         conn = DBRepository.create_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id, username, role, firstName, lastName FROM users")
+        cursor.execute("SELECT id, username, role, first_name, last_name FROM users")
         users = cursor.fetchall()
 
         for user in users:

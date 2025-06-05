@@ -1,19 +1,29 @@
 import base64
+import os
 from datetime import datetime
 
+from Enum.Color import Color
 from Enum.LogType import LogType
 from Security.SecurityHelper import SecurityHelper
 from Service.EncryptionService import EncryptionService
+from View.UserInterfaceAlert import UserInterfaceAlert
+from View.UserInterfaceFlow import UserInterfaceFlow
 
 
 class LogRepository:
     # TODO: OWASP logging?
 
-    logFilename = "log.csv"
+    log_filename = "log.csv"
+    log_dir = "../../Storage"
 
     @staticmethod
     def log(log_type: LogType, additional_message: str = ""):
-        log_file = open(LogRepository.logFilename, "a")
+
+        base_dir = LogRepository.__check_log_dir()
+
+        log_path = os.path.realpath(base_dir + LogRepository.log_dir + "/" + LogRepository.log_filename)
+
+        log_file = open(log_path, "a+")
 
         count = LogRepository.__get_log_length()
 
@@ -35,7 +45,11 @@ class LogRepository:
 
     @staticmethod
     def find_all() -> list[str]:
-        log_file = open(LogRepository.logFilename, "r") # TODO: Handle not exist
+        base_dir = LogRepository.__check_log_dir()
+
+        log_path = os.path.realpath(base_dir + LogRepository.log_dir + "/" + LogRepository.log_filename)
+
+        log_file = open(log_path, "r+")
 
         logs = []
 
@@ -48,7 +62,11 @@ class LogRepository:
 
     @staticmethod
     def __get_log_length() -> int:
-        log_file = open(LogRepository.logFilename, "r")
+        base_dir = LogRepository.__check_log_dir()
+
+        log_path = os.path.realpath(base_dir + LogRepository.log_dir + "/" + LogRepository.log_filename)
+
+        log_file = open(log_path, "r")
 
         count = 0
         for count, line in enumerate(log_file):
@@ -57,3 +75,16 @@ class LogRepository:
         log_file.close()
 
         return count
+
+
+
+    @staticmethod
+    def __check_log_dir():
+        base_dir = os.path.dirname(os.path.realpath(__file__))
+        if not os.path.exists(os.path.realpath(base_dir + LogRepository.log_dir)):
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Log opslag fout, afsluiten...", Color.FAIL),
+                1
+            )
+            exit(1)
+        return base_dir

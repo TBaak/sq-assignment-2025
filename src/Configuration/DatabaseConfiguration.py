@@ -5,7 +5,7 @@ from Repository.BaseClasses.DBRepository import DBRepository
 
 
 class DatabaseConfiguration:
-    dbConnection = None
+    db_connection = None
 
     @staticmethod
     def start():

@@ -18,15 +18,15 @@ class UserForm(Form):
         ui.add(UserInterfaceAlert(text="Voer de gegevens in van de nieuwe user", color=Color.WHITE))
         ui.add(UserInterfacePrompt(
             prompt_text="Voornaam",
-            memory_key="firstName",
-            value=existing.firstName if existing else None,
+            memory_key="first_name",
+            value=existing.first_name if existing else None,
             validations=[NotBlankValidation(), OnlyLetterValidation()])
         )
 
         ui.add(UserInterfacePrompt(
             prompt_text="Achternaam",
-            memory_key="lastName",
-            value=existing.lastName if existing else None,
+            memory_key="last_name",
+            value=existing.last_name if existing else None,
             validations=[NotBlankValidation(), OnlyLetterValidation()])
         )
 

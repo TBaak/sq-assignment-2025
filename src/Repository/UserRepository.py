@@ -21,7 +21,7 @@ class UserRepository:
         if ids is None:
             ids = IndexService.find_user_by_role(role)
 
-        cursor.execute('SELECT id, username, password, role, firstName, lastName, registration_date FROM users '
+        cursor.execute('SELECT id, username, password, role, first_name, last_name, registration_date FROM users '
                        'WHERE id IN (%s)' % ','.join('?' * len(ids)), ids)
 
         result = cursor.fetchall()
@@ -33,7 +33,7 @@ class UserRepository:
 
         for userData in result:
             user = User(is_encrypted=True)
-            user.populate(userData, ['id', 'username', 'password', 'role', 'firstName', 'lastName', 'registration_date'])
+            user.populate(userData, ['id', 'username', 'password', 'role', 'first_name', 'last_name', 'registration_date'])
             user.decrypt()
             users.append(user)
 
@@ -73,15 +73,15 @@ class UserRepository:
 
         cursor.execute(
             "INSERT INTO users ("
-            "firstName,"
-            "lastName,"
+            "first_name,"
+            "last_name,"
             "role,"
             "username,"
             "password,"
             "registration_date"
             ") VALUES ("
-            ":firstName,"
-            ":lastName,"
+            ":first_name,"
+            ":last_name,"
             ":role,"
             ":username,"
             ":password,"
@@ -105,8 +105,8 @@ class UserRepository:
 
         cursor.execute(
             "UPDATE users SET "
-            "firstName = :firstName,"
-            "lastName = :lastName,"
+            "first_name = :first_name,"
+            "last_name = :last_name,"
             "username = :username "
             "WHERE id = :id",
             user.serialize()
