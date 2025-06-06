@@ -36,6 +36,7 @@ class IndexService:
         IndexService.index[IndexDomain.TRAVELLER_ADDRESS.value] = {}
         IndexService.index[IndexDomain.TRAVELLER_EMAIL.value] = {}
         IndexService.index[IndexDomain.TRAVELLER_PHONE.value] = {}
+        IndexService.index[IndexDomain.TRAVELLER_DRIVING_LICENSE_NUMBER.value] = {}
 
         IndexService.index[IndexDomain.SCOOTER_BRAND.value] = {}
         IndexService.index[IndexDomain.SCOOTER_MODEL.value] = {}
@@ -61,6 +62,7 @@ class IndexService:
         results = IndexService.__search_domain(IndexDomain.TRAVELLER_ADDRESS, query, results)
         results = IndexService.__search_domain(IndexDomain.TRAVELLER_EMAIL, query, results)
         results = IndexService.__search_domain(IndexDomain.TRAVELLER_PHONE, query, results)
+        results = IndexService.__search_domain(IndexDomain.TRAVELLER_DRIVING_LICENSE_NUMBER, query, results)
 
         return results
 
@@ -146,7 +148,8 @@ class IndexService:
                        "zip_code,"
 
                        "email_address,"
-                       "phone_number "
+                       "phone_number, "
+                       "driving_license_number "
                        "FROM travellers")
         users = cursor.fetchall()
 
@@ -182,6 +185,11 @@ class IndexService:
                 IndexDomain.TRAVELLER_PHONE,
                 user[0],
                 EncryptionService.decrypt(user[8])
+            )
+            IndexService.__add_to_index(
+                IndexDomain.TRAVELLER_DRIVING_LICENSE_NUMBER,
+                user[0],
+                EncryptionService.decrypt(user[9])
             )
 
     @staticmethod

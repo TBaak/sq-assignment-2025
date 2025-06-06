@@ -13,6 +13,7 @@ class IndexDomain(Enum):
     TRAVELLER_ADDRESS = "traveller_address"
     TRAVELLER_EMAIL = "traveller_email"
     TRAVELLER_PHONE = "traveller_phone"
+    TRAVELLER_DRIVING_LICENSE_NUMBER = "traveller_dln"
 
     SCOOTER_BRAND = "scooter_brand"
     SCOOTER_MODEL = "scooter_model"

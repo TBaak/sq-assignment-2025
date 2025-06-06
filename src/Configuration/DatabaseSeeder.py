@@ -11,7 +11,7 @@ from Service.HashService import HashService
 class DatabaseSeeder:
 
     @staticmethod
-    def seedScooters():
+    def seed_scooters():
         scooters = [{"brand": "MINI", "model": "Cooper", "serial_number": "1131193963", "top_speed": 60,
                      "battery_capacity": 7617, "state_of_charge": 73, "target_range_soc_min": 5,
                      "target_range_soc_max": 79, "location_lat": "51.92250", "location_lng": "4.47917",
@@ -518,3 +518,93 @@ class DatabaseSeeder:
             values = list(map(lambda v: str(v), list(scooter_data.values())))
             scooter.populate(values, list(scooter_data.keys()))
             ScooterRepository.persist_scooter(scooter)
+
+    @staticmethod
+    def seed_travellers():
+
+        travellers = [{"first_name": "Mylène", "last_name": "Grimsdith", "street_name": "Ilene", "dob": "1995-06-25",
+                       "gender": "v", "house_number": 21, "city": "Luže", "zip_code": "9999XX",
+                       "email_address": "cgrimsdith0@youtu.be", "phone_number": 46027007,
+                       "driving_license_number": 16862384},
+                      {"first_name": "Crééz", "last_name": "Hughman", "street_name": "Declaration", "dob": "1997-04-09",
+                       "gender": "v", "house_number": 261, "city": "Bang Rakam", "zip_code": "9999XX",
+                       "email_address": "lhughman1@weebly.com", "phone_number": 45023286,
+                       "driving_license_number": 30901517},
+                      {"first_name": "Marylène", "last_name": "Chesher", "street_name": "Mallard", "dob": "1991-01-21",
+                       "gender": "v", "house_number": 136, "city": "Saint-Raymond", "zip_code": "9999XX",
+                       "email_address": "fchesher2@pbs.org", "phone_number": 52457935,
+                       "driving_license_number": 79621886},
+                      {"first_name": "Maëly", "last_name": "Tourne", "street_name": "Oak Valley", "dob": "1971-02-18",
+                       "gender": "v", "house_number": 2, "city": "Rive-de-Gier", "zip_code": "9999XX",
+                       "email_address": "stourne3@a8.net", "phone_number": 18367452,
+                       "driving_license_number": 70102017},
+                      {"first_name": "Sélène", "last_name": "Hamlyn", "street_name": "Linden", "dob": "1987-07-16",
+                       "gender": "m", "house_number": 380, "city": "Heshui", "zip_code": "9999XX",
+                       "email_address": "whamlyn4@tamu.edu", "phone_number": 78120297,
+                       "driving_license_number": 22488389},
+                      {"first_name": "Lyséa", "last_name": "Manderson", "street_name": "Declaration",
+                       "dob": "1992-07-07", "gender": "v", "house_number": 147, "city": "Byczyna", "zip_code": "9999XX",
+                       "email_address": "cmanderson5@shareasale.com", "phone_number": 90846208,
+                       "driving_license_number": 27702959},
+                      {"first_name": "Torbjörn", "last_name": "Exroll", "street_name": "Magdeline", "dob": "1989-12-10",
+                       "gender": "m", "house_number": 496, "city": "Rezé", "zip_code": "9999XX",
+                       "email_address": "texroll6@drupal.org", "phone_number": 75028024,
+                       "driving_license_number": 95734041},
+                      {"first_name": "Laïla", "last_name": "Kullmann", "street_name": "Brown", "dob": "1982-01-14",
+                       "gender": "v", "house_number": 425, "city": "Arcos", "zip_code": "9999XX",
+                       "email_address": "skullmann7@ameblo.jp", "phone_number": 75498399,
+                       "driving_license_number": 95784114},
+                      {"first_name": "Åsa", "last_name": "Connochie", "street_name": "Ramsey", "dob": "1980-05-30",
+                       "gender": "m", "house_number": 207, "city": "Yangsi", "zip_code": "9999XX",
+                       "email_address": "econnochie8@dropbox.com", "phone_number": 94918025,
+                       "driving_license_number": 27737660},
+                      {"first_name": "Lóng", "last_name": "Harbord", "street_name": "Oneill", "dob": "1985-08-26",
+                       "gender": "m", "house_number": 177, "city": "Mansôa", "zip_code": "9999XX",
+                       "email_address": "nharbord9@gnu.org", "phone_number": 68971847,
+                       "driving_license_number": 93837741},
+                      {"first_name": "Maëlle", "last_name": "Blees", "street_name": "Oak", "dob": "2004-06-27",
+                       "gender": "m", "house_number": 227, "city": "Hampton", "zip_code": "9999XX",
+                       "email_address": "mbleesa@gov.uk", "phone_number": 74011171, "driving_license_number": 25791679},
+                      {"first_name": "Kù", "last_name": "Mealand", "street_name": "Brentwood", "dob": "1978-05-31",
+                       "gender": "v", "house_number": 431, "city": "Repušnica", "zip_code": "9999XX",
+                       "email_address": "mmealandb@ocn.ne.jp", "phone_number": 43841776,
+                       "driving_license_number": 12890937},
+                      {"first_name": "Irène", "last_name": "Schutt", "street_name": "Rockefeller", "dob": "1978-01-29",
+                       "gender": "m", "house_number": 260, "city": "Petäjävesi", "zip_code": "9999XX",
+                       "email_address": "bschuttc@yahoo.com", "phone_number": 79170622,
+                       "driving_license_number": 95963794},
+                      {"first_name": "Maëlys", "last_name": "Climie", "street_name": "Packers", "dob": "2002-04-22",
+                       "gender": "v", "house_number": 563, "city": "Kempele", "zip_code": "9999XX",
+                       "email_address": "cclimied@ehow.com", "phone_number": 18450522,
+                       "driving_license_number": 13396837},
+                      {"first_name": "Yénora", "last_name": "Sagerson", "street_name": "Esch", "dob": "1998-02-10",
+                       "gender": "m", "house_number": 114, "city": "Burayevo", "zip_code": "9999XX",
+                       "email_address": "bsagersone@cbsnews.com", "phone_number": 18800575,
+                       "driving_license_number": 28442710},
+                      {"first_name": "Edmée", "last_name": "Browse", "street_name": "Farwell", "dob": "1971-12-12",
+                       "gender": "v", "house_number": 386, "city": "Al Bīrah", "zip_code": "9999XX",
+                       "email_address": "hbrowsef@e-recht24.de", "phone_number": 99467966,
+                       "driving_license_number": 28072434},
+                      {"first_name": "Jú", "last_name": "Filipyev", "street_name": "Anthes", "dob": "1984-02-04",
+                       "gender": "v", "house_number": 321, "city": "Pereira", "zip_code": "9999XX",
+                       "email_address": "yfilipyevg@sitemeter.com", "phone_number": 70925188,
+                       "driving_license_number": 40698709},
+                      {"first_name": "Léandre", "last_name": "Mattimoe", "street_name": "Hollow Ridge",
+                       "dob": "1994-09-21", "gender": "m", "house_number": 414, "city": "Kebonbencoy",
+                       "zip_code": "9999XX", "email_address": "wmattimoeh@about.me", "phone_number": 34949342,
+                       "driving_license_number": 38633133},
+                      {"first_name": "Maïlys", "last_name": "De la Harpe", "street_name": "Longview",
+                       "dob": "1972-12-05", "gender": "v", "house_number": 475, "city": "Jongorsari",
+                       "zip_code": "9999XX", "email_address": "mdelaharpei@biglobe.ne.jp", "phone_number": 33288272,
+                       "driving_license_number": 15077305},
+                      {"first_name": "Célestine", "last_name": "Stroobant", "street_name": "School",
+                       "dob": "2000-01-29", "gender": "m", "house_number": 320, "city": "Seka", "zip_code": "9999XX",
+                       "email_address": "istroobantj@biblegateway.com", "phone_number": 13964287,
+                       "driving_license_number": 64081850}]
+
+        for traveller_data in travellers:
+            traveller = Traveller()
+            values = list(map(lambda v: str(v), list(traveller_data.values())))
+            traveller.populate(values, list(traveller_data.keys()))
+            traveller.number = TravellerRepository.generate_traveller_number()
+            TravellerRepository.persist_traveller(traveller)

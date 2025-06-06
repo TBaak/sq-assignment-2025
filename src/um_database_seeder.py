@@ -25,7 +25,12 @@ def main():
 
     UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database geïndexeerd ", Color.OKGREEN), 0)
 
-    DatabaseSeeder.seedScooters()
+    UserInterfaceFlow.quick_run(UserInterfaceAlert("[ ] Database vullen..."), 0)
+
+    DatabaseSeeder.seed_scooters()
+    DatabaseSeeder.seed_travellers()
+
+    UserInterfaceFlow.quick_run(UserInterfaceAlert("[+] Database gevuld ", Color.OKGREEN), 0)
 
 if __name__ == '__main__':
     main()
