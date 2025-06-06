@@ -9,6 +9,12 @@ class Role(Enum):
         Permission.TravellerRead.value,
         Permission.TravellerUpdate.value,
         Permission.TravellerDelete.value,
+        
+        Permission.ScooterCreate.value,
+        Permission.ScooterRead.value,
+        Permission.ScooterUpdate.value,
+        Permission.ScooterDelete.value,
+        Permission.ScooterUpdateFull.value,
 
         Permission.UserServiceEngineerCreate.value,
         Permission.UserServiceEngineerRead.value,

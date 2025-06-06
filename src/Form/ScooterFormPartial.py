@@ -26,7 +26,7 @@ from View.Validations.YesNoValidation import YesNoValidation
 from View.Validations.ZipcodeValidation import ZipcodeValidation
 
 
-class ScooterFormFull(Form):
+class ScooterFormPartial(Form):
 
     @staticmethod
     def get_form(ui: UserInterfaceFlow, existing: Scooter = None) -> UserInterfaceFlow:
@@ -56,7 +56,7 @@ class ScooterFormFull(Form):
         ui.add(UserInterfacePrompt(
             prompt_text="Locatie (latitude longitude bijv. \"51.92250 4.47917\", 5 decimalen)",
             memory_key="location",
-            value=existing.location_lat + existing.location_lng if existing else None,
+            value=existing.location_lat + ' ' + existing.location_lng if existing else None,
             validations=[NotBlankValidation(), CoordinateValidation()])
         )
 

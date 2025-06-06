@@ -19,6 +19,7 @@ class IndexService:
 
         IndexService.__index_users()
         IndexService.__index_travellers()
+        IndexService.__index_scooters()
 
         pass
 
@@ -36,18 +37,9 @@ class IndexService:
         IndexService.index[IndexDomain.TRAVELLER_EMAIL.value] = {}
         IndexService.index[IndexDomain.TRAVELLER_PHONE.value] = {}
 
-        IndexService.index[IndexDomain.SCOOTER_BRAND.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_MODEL.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_SERIAL_NUMBER.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_TOP_SPEED.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_STATE_OF_CHARGE.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_STATE_OF_CHARGE_TARGET_MIN.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_STATE_OF_CHARGE_TARGET_MAX.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_LOCATION_LAT.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_LOCATION_LNG.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_MILEAGE.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_LAST_MAINTENANCE_DATE.name] = {}
-        IndexService.index[IndexDomain.SCOOTER_IN_SERVICE_DATE.name] = {}
+        IndexService.index[IndexDomain.SCOOTER_BRAND.value] = {}
+        IndexService.index[IndexDomain.SCOOTER_MODEL.value] = {}
+        IndexService.index[IndexDomain.SCOOTER_SERIAL_NUMBER.value] = {}
 
     @staticmethod
     def add_user_to_index(user: User):
@@ -79,16 +71,6 @@ class IndexService:
         results = IndexService.__search_domain(IndexDomain.SCOOTER_BRAND, query, results)
         results = IndexService.__search_domain(IndexDomain.SCOOTER_MODEL, query, results)
         results = IndexService.__search_domain(IndexDomain.SCOOTER_SERIAL_NUMBER, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_TOP_SPEED, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_STATE_OF_CHARGE, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_STATE_OF_CHARGE_TARGET_MIN, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_STATE_OF_CHARGE_TARGET_MAX, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_LOCATION_LAT, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_LOCATION_LNG, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_MILEAGE, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_LAST_MAINTENANCE_DATE, query, results)
-        results = IndexService.__search_domain(IndexDomain.SCOOTER_IN_SERVICE_DATE, query, results)
-
 
         return results
 
@@ -212,18 +194,7 @@ class IndexService:
                        "id, "
                        "brand, "
                        "model, "
-                       "serial_number, "
-                       "top_speed, "
-                       "battery_capacity, "
-                       "state_of_charge, "
-                       "target_range_soc_min, "
-                       "target_range_soc_max, "
-                       "location_lat, "
-                       "location_lng, "
-                       "out_of_service_status, "
-                       "mileage, "
-                       "last_maintenance, "
-                       "in_service_date "
+                       "serial_number "
                        "FROM scooters")
         scooters = cursor.fetchall()
 
@@ -243,46 +214,7 @@ class IndexService:
                 scooter[0],
                 EncryptionService.decrypt(scooter[3])
             )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_TOP_SPEED,
-                scooter[0],
-                EncryptionService.decrypt(scooter[4])
-            )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_STATE_OF_CHARGE,
-                scooter[0],
-                EncryptionService.decrypt(scooter[5])
-            )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_STATE_OF_CHARGE_TARGET_MIN,
-                scooter[0],
-                EncryptionService.decrypt(scooter[6])
-            )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_STATE_OF_CHARGE_TARGET_MAX,
-                scooter[0],
-                EncryptionService.decrypt(scooter[7])
-            )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_LOCATION_LAT,
-                scooter[0],
-                EncryptionService.decrypt(scooter[8])
-            )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_LOCATION_LNG,
-                scooter[0],
-                EncryptionService.decrypt(scooter[9])
-            )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_MILEAGE,
-                scooter[0],
-                EncryptionService.decrypt(scooter[10])
-            )
-            IndexService.__add_to_index(
-                IndexDomain.SCOOTER_LAST_MAINTENANCE_DATE,
-                scooter[0],
-                EncryptionService.decrypt(scooter[11])
-            )
+
 
 
     @staticmethod

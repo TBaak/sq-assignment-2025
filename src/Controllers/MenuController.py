@@ -1,5 +1,6 @@
 from Controllers.BackupController import BackupController
 from Controllers.LogController import LogController
+from Controllers.ScooterController import ScooterController
 from Controllers.TravellerController import TravellerController
 from Controllers.UserController import UserController
 from DTO.MenuOption import MenuOption
@@ -147,6 +148,14 @@ class MenuController:
 
         if AuthorizationService.current_user_has_permission(Permission.TravellerCreate):
             self.menu_choices.append(MenuOption("Traveller toevoegen", tc.add_traveller))
+
+        sc = ScooterController()
+
+        if AuthorizationService.current_user_has_permission(Permission.ScooterRead):
+            self.menu_choices.append(MenuOption("Scooter overzicht", sc.list_scooters))
+
+        if AuthorizationService.current_user_has_permission(Permission.ScooterCreate):
+            self.menu_choices.append(MenuOption("Scooter toevoegen", sc.add_scooter))
 
         lc = LogController()
 

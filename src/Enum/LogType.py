@@ -22,6 +22,12 @@ class LogType(Enum):
     TravellerUpdated = LogTypeDTO("Traveller is updated")
     TravellerDeleted = LogTypeDTO("Traveller is deleted")
 
+    ScooterCreated = LogTypeDTO("Scooter is created")
+    ScooterRead = LogTypeDTO("Scooter is read")
+    ScootersRead = LogTypeDTO("Scooter is read")
+    ScooterUpdated = LogTypeDTO("Scooter is updated")
+    ScooterDeleted = LogTypeDTO("Scooter is deleted")
+
     BackupCreated = LogTypeDTO("Backup is created")
     BackupRestored = LogTypeDTO("Backup is restored")
 

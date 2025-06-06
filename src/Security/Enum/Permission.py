@@ -7,6 +7,10 @@ class Permission(Enum):
     TravellerUpdate = "traveller_update"
     TravellerDelete = "traveller_delete"
 
+    ScooterCreate = "scooter_create"
+    ScooterRead = "scooter_read"
+    ScooterUpdate = "scooter_update"
+    ScooterDelete = "scooter_delete"
     ScooterUpdateFull = "scooter_update_full"
     ScooterUpdatePartial = "scooter_update_partial"
 

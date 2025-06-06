@@ -3,7 +3,7 @@ from View.Validations.Validation import Validation
 
 
 class CoordinateValidation(Validation):
-    staticmethod
+    @staticmethod
     def validate(value: str) -> tuple[bool, str]:
         coordinate_pattern = r'^-?\d{1,3}\.\d{5}\s-?\d{1,3}\.\d{5}$'
 

@@ -180,13 +180,13 @@ class ScooterRepository:
         db.close()
 
     @staticmethod
-    def delete_traveller(traveller):
+    def delete_scooter(scooter: Scooter):
         db = DBRepository.create_connection()
         cursor = db.cursor()
 
         cursor.execute(
             "DELETE FROM scooters WHERE id = :id",
-            traveller.serialize()
+            scooter.serialize()
         )
 
 
