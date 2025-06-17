@@ -18,3 +18,5 @@ class IndexDomain(Enum):
     SCOOTER_BRAND = "scooter_brand"
     SCOOTER_MODEL = "scooter_model"
     SCOOTER_SERIAL_NUMBER = "scooter_serial_number"
+
+    OTC_CODE = "otc_code"

@@ -1,5 +1,5 @@
 from Controllers.MenuController import MenuController
-from DTO.LoginError import LoginError
+from Enum.LoginError import LoginError
 from Enum.Color import Color
 from Enum.LogType import LogType
 from Repository.LogRepository import LogRepository

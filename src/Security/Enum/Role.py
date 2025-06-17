@@ -31,6 +31,8 @@ class Role(Enum):
         # Permission.UserUpdateOwnPassword.value, Not possible because it is hardcodes
 
         Permission.BackupCreate.value,
+        Permission.BackupCreateOtc.value,
+        Permission.BackupReadOtc.value,
         Permission.BackupRestore.value,
 
         Permission.LogRead.value,
@@ -47,13 +49,22 @@ class Role(Enum):
         Permission.UserServiceEngineerDelete.value,
         Permission.UserServiceEngineerResetPassword.value,
 
+        Permission.ScooterCreate.value,
+        Permission.ScooterRead.value,
+        Permission.ScooterUpdate.value,
+        Permission.ScooterDelete.value,
+        Permission.ScooterUpdateFull.value,
+
         Permission.UserUpdateOwnPassword.value,
 
         Permission.BackupCreate.value,
-        Permission.BackupRestore.value,
+        Permission.BackupRestoreWithOtc.value,
 
         Permission.LogRead.value,
     ]
     SERVICE_ENGINEER = [
         Permission.UserUpdateOwnPassword.value,
+        Permission.ScooterRead.value,
+        Permission.ScooterUpdate.value,
+        Permission.ScooterUpdatePartial.value,
     ]

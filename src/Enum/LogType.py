@@ -30,6 +30,8 @@ class LogType(Enum):
 
     BackupCreated = LogTypeDTO("Backup is created")
     BackupRestored = LogTypeDTO("Backup is restored")
+    BackupOneTimeCodeCreated = LogTypeDTO("Backup one time code is created")
+    BackupOneTimeCodeDeleted = LogTypeDTO("Backup one time code is deleted")
 
     SuccessfulLogin = LogTypeDTO("Logged in")
     UnsuccessfulLogin = LogTypeDTO("Unsuccessful login")

@@ -20,6 +20,7 @@ class IndexService:
         IndexService.__index_users()
         IndexService.__index_travellers()
         IndexService.__index_scooters()
+        IndexService.__index_otc()
 
         pass
 
@@ -41,6 +42,8 @@ class IndexService:
         IndexService.index[IndexDomain.SCOOTER_BRAND.value] = {}
         IndexService.index[IndexDomain.SCOOTER_MODEL.value] = {}
         IndexService.index[IndexDomain.SCOOTER_SERIAL_NUMBER.value] = {}
+
+        IndexService.index[IndexDomain.OTC_CODE.value] = {}
 
     @staticmethod
     def add_user_to_index(user: User):
@@ -94,9 +97,16 @@ class IndexService:
         return IndexService.__search_domain(IndexDomain.USER_ROLE, role.name.lower(), [])
 
     @staticmethod
+    def find_otc_by_code(code: str):
+        results = IndexService.__search_domain(IndexDomain.OTC_CODE, code.lower(), [])
+        if len(results) > 0:
+            return results[0]
+        return None
+
+    @staticmethod
     def __search_domain(domain: IndexDomain, query: str, results: list[int]):
         for key, value in IndexService.index[domain.value].items():
-            if query in key:
+            if query.lower() in key:
                 results = results + value
         return results
 
@@ -223,6 +233,21 @@ class IndexService:
                 EncryptionService.decrypt(scooter[3])
             )
 
+
+    @staticmethod
+    def __index_otc():
+        conn = DBRepository.create_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id, one_time_code FROM backup_one_time_codes")
+        otc_s = cursor.fetchall()
+
+        for otc in otc_s:
+            IndexService.__add_to_index(
+                IndexDomain.OTC_CODE,
+                otc[0],
+                EncryptionService.decrypt(otc[1])
+            )
 
 
     @staticmethod

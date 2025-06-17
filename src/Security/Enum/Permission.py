@@ -30,5 +30,10 @@ class Permission(Enum):
 
     BackupCreate = "backup_create"
     BackupRestore = "backup_restore"
+    BackupCreateOtc = "backup_create_otc"
+    BackupReadOtc = "backup_read_otc"
+    BackupRestoreWithOtc = "backup_restore_with_otc"
 
     LogRead = "log_read"
+
+

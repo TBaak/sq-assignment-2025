@@ -14,6 +14,7 @@ class DatabaseConfiguration:
         DatabaseConfiguration.__table_travellers(db)
         DatabaseConfiguration.__table_users(db)
         DatabaseConfiguration.__table_scooters(db)
+        DatabaseConfiguration.__table_otc(db)
 
         db.close()
 
@@ -50,6 +51,20 @@ class DatabaseConfiguration:
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
         with open(dir_path + '/DatabaseScripts/CreateScooterTable.sql', 'r') as sql_file:
+            sql_script = sql_file.read()
+
+        cursor = db.cursor()
+        cursor.executescript(sql_script)
+        cursor.close()
+
+
+        db.commit()
+
+    @staticmethod
+    def __table_otc(db: Connection):
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(dir_path + '/DatabaseScripts/CreateOneTimeCodeTable.sql', 'r') as sql_file:
             sql_script = sql_file.read()
 
         cursor = db.cursor()

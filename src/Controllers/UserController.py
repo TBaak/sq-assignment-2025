@@ -48,7 +48,7 @@ class UserController:
 
     def __show_users(self, role: Role, users: list[User] = None):
 
-        header_type = "Service Engineer" if role.SERVICE_ENGINEER else "Systeem beheerder"
+        header_type = "Service Engineer" if role == Role.SERVICE_ENGINEER else "Systeem beheerder"
         header = f"{header_type} overzicht" if users is None else "Zoekresultaten"
 
         if users is None:

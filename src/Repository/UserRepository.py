@@ -2,8 +2,7 @@ import string
 import random
 from typing import Optional
 
-from DTO.LoginError import LoginError
-from Enum.UserType import UserType
+from Enum.LoginError import LoginError
 from Models.User import User
 from Repository.BaseClasses.DBRepository import DBRepository
 from Security.Enum.Role import Role
@@ -38,6 +37,30 @@ class UserRepository:
             users.append(user)
 
         return users
+
+    @staticmethod
+    def find_by_id(user_id: int) -> Optional[User]:
+        db = DBRepository.create_connection()
+        cursor = db.cursor()
+
+        cursor.execute(
+            "SELECT id, username, password, role, first_name, last_name, registration_date FROM users WHERE id = :user_id",
+            {"user_id": user_id}
+        )
+
+        userValues = cursor.fetchone()
+
+        if userValues is None:
+            return None
+
+        user = User(is_encrypted=True)
+        user.populate(userValues, ['id', 'username', 'password', 'role', 'first_name', 'last_name', 'registration_date'])
+        user.decrypt()
+
+        cursor.close()
+        db.close()
+
+        return user
 
     @staticmethod
     def find_by_credentials(username: str, password: str) -> (Optional[User], Optional[LoginError]):
@@ -143,6 +166,9 @@ class UserRepository:
 
     @staticmethod
     def generate_valid_password() -> str:
+
+        # TODO Make the passwords more readable
+
         # Define the character sets
         lowercase = string.ascii_lowercase
         uppercase = string.ascii_uppercase

@@ -49,6 +49,8 @@ class MenuController:
                 )
                 continue
 
+
+
         UserInterfaceFlow.quick_run(
             UserInterfaceAlert("Tot ziens!", Color.HEADER)
         )
@@ -177,6 +179,15 @@ class MenuController:
 
         if AuthorizationService.current_user_has_permission(Permission.BackupRestore):
             self.menu_choices.append(MenuOption("Backup terugzetten", bc.list_backups))
+
+        if AuthorizationService.current_user_has_permission(Permission.BackupCreateOtc):
+            self.menu_choices.append(MenuOption("Backup one-time-code maken", bc.create_otc))
+
+        if AuthorizationService.current_user_has_permission(Permission.BackupCreateOtc):
+            self.menu_choices.append(MenuOption("Backup one-time-codes overzicht", bc.list_otc))
+
+        if AuthorizationService.current_user_has_permission(Permission.BackupRestoreWithOtc):
+            self.menu_choices.append(MenuOption("Backup terugzetten met one-time-code", bc.restore_with_otc))
 
         uc = UserController()
 
