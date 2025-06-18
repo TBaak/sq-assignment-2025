@@ -19,8 +19,9 @@ class UserPasswordForm(Form):
         ui.add(UserInterfacePrompt(
             prompt_text="Nieuw wachtwoord",
             memory_key="password",
+            is_password=True,
             value=None,
-            validations=[NotBlankValidation(), PasswordValidation()])
+            validations=[NotBlankValidation(), PasswordValidation()]),
         )
 
         return ui

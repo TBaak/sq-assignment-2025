@@ -88,11 +88,11 @@ class UserController:
             if role == Role.SYSTEM_ADMIN:
                 return self.search_system_admin_user()
 
-        user_index = int(selected) - 1
 
         try:
+            user_index = int(selected) - 1
             selected_user = users[user_index]
-        except IndexError:
+        except (ValueError, IndexError):
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1

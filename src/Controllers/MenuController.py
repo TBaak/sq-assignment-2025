@@ -42,7 +42,7 @@ class MenuController:
             try:
                 int(menu_result["selection"])
                 self.menu_choices[int(menu_result["selection"]) - 1].action()
-            except IndexError:
+            except (ValueError, IndexError):
                 UserInterfaceFlow.quick_run(
                     UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                     1

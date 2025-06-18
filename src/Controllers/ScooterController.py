@@ -73,12 +73,11 @@ class ScooterController:
             )
             return self.list_scooters()
 
-        index = int(selected) - 1
-
         try:
+            index = int(selected) - 1
             self.show_scooter(scooters[index])
             return None
-        except IndexError:
+        except (ValueError, IndexError):
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
@@ -175,6 +174,7 @@ class ScooterController:
         fields['location_lat'] = str(lat)
         fields['location_lng'] = str(lng)
         fields['in_service_date'] = datetime.now().strftime("%d-%m-%Y")
+        fields['out_of_service_status'] = fields['out_of_service_status'].lower()
 
         scooter = Scooter()
         scooter.populate(list(fields.values()), list(fields.keys()))
@@ -204,6 +204,8 @@ class ScooterController:
             ui = ScooterFormPartial.get_form(ui, scooter)
 
         fields = ui.run()
+
+        fields['out_of_service_status'] = fields['out_of_service_status'].lower()
 
         scooter.populate(list(fields.values()), list(fields.keys()))
 

@@ -66,7 +66,7 @@ class BackupController:
             selected = int(result["selection"]) - 1
             selected_backup = backup_files[selected]
             self.__restore_backup(selected_backup)
-        except IndexError:
+        except (ValueError, IndexError):
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
@@ -175,7 +175,7 @@ class BackupController:
         ui.add(UserInterfaceAlert("Na het terugzetten van een backup word u uitgelogd", Color.WARNING))
 
         ui.add(UserInterfacePrompt("Voer de one-time-code in", "otc",
-                                   validations=[NotBlankValidation(), LengthValidation(length=6), OnlyLetterValidation()]))
+                                   validations=[NotBlankValidation(), LengthValidation(length=32), OnlyLetterValidation()]))
 
         result = ui.run()
 
@@ -279,7 +279,7 @@ class BackupController:
 
         try:
             selected_backup = backup_files[int(result["selection"]) - 1]
-        except Exception:
+        except (ValueError, IndexError):
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
@@ -334,7 +334,7 @@ class BackupController:
 
         try:
             selected_otc = otc_list[int(selected) - 1]
-        except Exception:
+        except (ValueError, IndexError):
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
@@ -357,7 +357,7 @@ class BackupController:
     @staticmethod
     def generate_otc_code() -> str:
         uppercase = string.ascii_uppercase
-        return ''.join(random.choice(uppercase) for _ in range(6))
+        return ''.join(random.choice(uppercase) for _ in range(32))
 
 
 

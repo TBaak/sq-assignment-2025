@@ -39,8 +39,6 @@ class UserRepository:
 
         return users
 
-    # TODO Verify SQL Injection prevention
-
     @staticmethod
     def find_by_id(user_id: int) -> Optional[User]:
         db = DBRepository.create_connection()

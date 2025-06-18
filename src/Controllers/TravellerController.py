@@ -68,11 +68,10 @@ class TravellerController:
             )
             return self.list_travellers()
 
-        traveller_index = int(selected) - 1
-
         try:
+            traveller_index = int(selected) - 1
             self.show_traveller(travellers[traveller_index])
-        except IndexError:
+        except (ValueError, IndexError):
             UserInterfaceFlow.quick_run(
                 UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
                 1
@@ -85,7 +84,7 @@ class TravellerController:
 
         query_ui = UserInterfaceFlow()
         query_ui.add(UserInterfacePrompt(
-            prompt_text="Zoeken op naam, leeftijd, e-mailadres, adres of traveller nummer",
+            prompt_text="Zoeken op naam, leeftijd, e-mailadres, adres",
             memory_key="query",
             validations=[NoSpecialCharsValidation()]
         )

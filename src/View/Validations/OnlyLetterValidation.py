@@ -6,8 +6,9 @@ class OnlyLetterValidation(Validation):
 
     @staticmethod
     def validate(value: str) -> tuple[bool, str]:
+        valueWithoutSpaces = value.replace(" ", "")
 
-        if value.isalpha():
+        if value == "" or valueWithoutSpaces.isalpha():
             return True, ""
 
         return False, "Deze waarde mag alleen letters bevatten"
