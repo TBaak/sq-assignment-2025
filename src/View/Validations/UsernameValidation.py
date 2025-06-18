@@ -7,7 +7,9 @@ class UsernameValidation(Validation):
 
     @staticmethod
     def validate(value: str) -> tuple[bool, str]:
-        pattern = r"(?i)^[a-z_][a-z0-9_'.]{7,9}$"
+        pattern = r"^[A-Za-z_][A-Za-z0-9_'.]{7,9}$"
+
+        value = value.lower()
 
         if re.match(pattern, value):
 

@@ -1,3 +1,4 @@
+import secrets
 import string
 import random
 from typing import Optional
@@ -38,6 +39,8 @@ class UserRepository:
 
         return users
 
+    # TODO Verify SQL Injection prevention
+
     @staticmethod
     def find_by_id(user_id: int) -> Optional[User]:
         db = DBRepository.create_connection()
@@ -73,13 +76,13 @@ class UserRepository:
             return None, LoginError.NotFound
 
         foundUser = cursor.execute(
-            "SELECT id, username, password, role FROM users WHERE id = :user_id", {"user_id": user_id}
+            "SELECT id, username, password, role, first_name, last_name, registration_date FROM users WHERE id = :user_id", {"user_id": user_id}
         )
 
         userValues = foundUser.fetchone()
 
         user = User(is_encrypted=True)
-        user.populate(userValues, ['id', 'username', 'password', 'role'])
+        user.populate(userValues, ['id', 'username', 'password', 'role', 'first_name', 'last_name', 'registration_date'])
         user.decrypt()
 
         if HashService.verify_password(password, user.password):
@@ -166,33 +169,29 @@ class UserRepository:
 
     @staticmethod
     def generate_valid_password() -> str:
+        length = 16
 
-        # TODO Make the passwords more readable
-
-        # Define the character sets
         lowercase = string.ascii_lowercase
         uppercase = string.ascii_uppercase
         digits = string.digits
-        special_characters = "~!@#$%&_-+=`|\\(){}[]:;'<>,.?/"
+        special = "~!@#$%&_*+-=`|\\(){}[]:;'<>,.?/"
 
-        # Ensure the password contains at least one of each required character type
-        password = [
-            random.choice(lowercase),
-            random.choice(uppercase),
-            random.choice(digits),
-            random.choice(special_characters)
+        # Ensure at least one character from each required set
+        password_chars = [
+            secrets.choice(lowercase),
+            secrets.choice(uppercase),
+            secrets.choice(digits),
+            secrets.choice(special)
         ]
-        
-        # Fill the rest of the password length with random choices from all allowed characters
-        all_characters = lowercase + uppercase + digits + special_characters
-        password_length = random.randint(12, 30)
-        password += random.choices(all_characters, k=password_length - 4)
 
-        # Shuffle the resulting password list to avoid predictable sequences
-        random.shuffle(password)
+        # Fill the remaining characters
+        all_chars = lowercase + uppercase + digits + special
+        password_chars += [secrets.choice(all_chars) for _ in range(length - 4)]
 
-        # Convert the list to a string and return
-        return ''.join(password)
+        # Shuffle to avoid predictable sequences
+        random.SystemRandom().shuffle(password_chars)
+
+        return ''.join(password_chars)
 
     @staticmethod
     def delete_user(user: User):

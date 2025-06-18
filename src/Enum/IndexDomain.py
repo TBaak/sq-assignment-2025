@@ -7,7 +7,6 @@ class IndexDomain(Enum):
     USER_FIRSTNAME = "user_firstname"
     USER_LASTNAME = "user_lastname"
 
-    TRAVELLER_NUMBER = "traveller_number"
     TRAVELLER_FIRSTNAME = "traveller_firstname"
     TRAVELLER_LASTNAME = "traveller_lastname"
     TRAVELLER_ADDRESS = "traveller_address"

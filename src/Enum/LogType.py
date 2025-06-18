@@ -4,6 +4,8 @@ from DTO.LogType import LogTypeDTO
 
 
 class LogType(Enum):
+    OwnUserUpdated = LogTypeDTO("Own user is updated")
+    OwnUserDeleted = LogTypeDTO("Own user is deleted")
     UserSystemAdminCreated = LogTypeDTO("User admin is created")
     UserSystemAdminRead = LogTypeDTO("User admin is read")
     UserSystemAdminsRead = LogTypeDTO("Users admin are read")

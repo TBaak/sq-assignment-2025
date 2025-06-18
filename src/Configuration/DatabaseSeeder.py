@@ -606,5 +606,4 @@ class DatabaseSeeder:
             traveller = Traveller()
             values = list(map(lambda v: str(v), list(traveller_data.values())))
             traveller.populate(values, list(traveller_data.keys()))
-            traveller.number = TravellerRepository.generate_traveller_number()
             TravellerRepository.persist_traveller(traveller)

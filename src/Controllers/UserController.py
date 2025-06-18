@@ -19,7 +19,9 @@ from View.UserInterfacePrompt import UserInterfacePrompt
 from View.UserInterfaceTable import UserInterfaceTable
 from View.UserInterfaceTableRow import UserInterfaceTableRow
 from View.Validations.NoSpecialCharsValidation import NoSpecialCharsValidation
+from View.Validations.NotBlankValidation import NotBlankValidation
 from View.Validations.OnlyLetterValidation import OnlyLetterValidation
+from View.Validations.YesNoValidation import YesNoValidation
 
 
 class UserController:
@@ -98,12 +100,17 @@ class UserController:
             return None
 
         if role == Role.SYSTEM_ADMIN:
-            self.show_system_admin_user(selected_user)
+            return self.show_system_admin_user(selected_user)
 
         if role == Role.SERVICE_ENGINEER:
-            self.show_service_engineer_user(selected_user)
+            return self.show_service_engineer_user(selected_user)
 
-        return self.__show_users(role, users)
+        UserInterfaceFlow.quick_run(
+            UserInterfaceAlert("Ongeldige keuze", Color.FAIL),
+            1
+        )
+
+        return None
 
     @Auth.permission_required(Permission.UserServiceEngineerRead)
     def show_service_engineer_user(self, user: User):
@@ -156,9 +163,9 @@ class UserController:
 
         elif selected.upper() == "D":
             if user.role == Role.SERVICE_ENGINEER.name:
-                self.delete_service_engineer_user(user)
+                return self.delete_service_engineer_user(user)
             if user.role == Role.SYSTEM_ADMIN.name:
-                self.delete_system_admin_user(user)
+                return self.delete_system_admin_user(user)
 
         elif selected.upper() == "R":
             if user.role == Role.SERVICE_ENGINEER.name:
@@ -232,6 +239,14 @@ class UserController:
     def update_system_admin_user(self, user: User):
         return self.update_user(user)
 
+    @Auth.permission_required(Permission.UserSystemAdminUpdateSelf)
+    def update_own_system_admin_user(self):
+        user = SecurityHelper.get_logged_in_user()
+
+        LogRepository.log(LogType.OwnUserUpdated, f"username: {user.username}")
+
+        return self.update_user(user)
+
     def update_user(self, user: User):
         header = "Service Engineer" if user.role == Role.SERVICE_ENGINEER.name else "Systeem beheerder"
 
@@ -269,7 +284,28 @@ class UserController:
     def delete_system_admin_user(self, user: User):
         return self.delete_user(user)
 
-    def delete_user(self, user: User):
+    @Auth.permission_required(Permission.UserSystemAdminDeleteSelf)
+    def delete_own_system_admin_user(self):
+
+        ui = UserInterfaceFlow()
+        ui.add(UserInterfacePrompt(
+            prompt_text="Weet je zeker dat je jouw account wilt verwijderen? Dit kan niet ongedaan worden gemaakt. (y/n)",
+            memory_key="prompt",
+            validations=[NotBlankValidation(), YesNoValidation()])
+        )
+        selection = ui.run()
+
+        if selection["prompt"].lower() == "y":
+            user = SecurityHelper.get_logged_in_user()
+
+            LogRepository.log(LogType.OwnUserDeleted, f"username: {user.username}")
+
+            return self.delete_user(user, True)
+
+
+        return None
+
+    def delete_user(self, user: User, exitOnSuccess: bool = False):
         UserRepository.delete_user(user)
 
         if user.role == Role.SERVICE_ENGINEER.name:
@@ -285,7 +321,13 @@ class UserController:
             2
         )
 
-        # TODO: Fix returning to old overview
+        if exitOnSuccess:
+            UserInterfaceFlow.quick_run(
+                UserInterfaceAlert("Tot ziens!", Color.HEADER)
+            )
+            exit(0)
+
+        return None
 
     @Auth.permission_required(Permission.UserServiceEngineerResetPassword)
     def reset_service_engineer_user(self, user: User):

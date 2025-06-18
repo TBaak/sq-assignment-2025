@@ -25,6 +25,8 @@ class Permission(Enum):
     UserSystemAdminUpdate = "user_system_admin_update"
     UserSystemAdminDelete = "user_system_admin_delete"
     UserSystemAdminResetPassword = "user_system_admin_reset_password"
+    UserSystemAdminUpdateSelf = "user_system_admin_update_self"
+    UserSystemAdminDeleteSelf = "user_system_admin_delete_self"
 
     UserUpdateOwnPassword = "user_update_own_password"
 

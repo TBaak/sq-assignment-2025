@@ -8,4 +8,4 @@ class AlphaNumericValidation(Validation):
         if value.isalnum():
             return True, ""
 
-        return False, "Deze waarde moet een getal zijn"
+        return False, "Deze waarde moet uit getallen en/of letters bestaan"

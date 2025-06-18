@@ -61,7 +61,7 @@ class LoginController:
             mc.menu()
             return
 
-        username = result["username"]
+        username = result["username"].lower()
         password = result["password"]
 
         loginResult = UserRepository.find_by_credentials(username, password)
@@ -112,7 +112,7 @@ class LoginController:
         LogRepository.log(LogType.SuccessfulLogin)
 
         UserInterfaceFlow.quick_run(
-            UserInterfaceAlert(f"Welkom {user.username}", Color.OKGREEN)
+            UserInterfaceAlert(f"Welkom {user.first_name} {user.last_name}", Color.OKGREEN)
         )
 
         mc = MenuController()

@@ -8,6 +8,7 @@ from View.UserInterfaceFlow import UserInterfaceFlow
 from View.UserInterfacePrompt import UserInterfacePrompt
 from View.Validations.CityValidation import CityValidation
 from View.Validations.DateValidation import DateValidation
+from View.Validations.DriverLicenseValidation import DriverLicenseValidation
 from View.Validations.EmailValidation import EmailValidation
 from View.Validations.GenderValidation import GenderValidation
 from View.Validations.LengthValidation import LengthValidation
@@ -29,7 +30,6 @@ class TravellerForm(Form):
             prompt_text="Voornaam",
             memory_key="first_name",
             value=existing.first_name if existing else None,
-            # TODO Allow names like Björk
             validations=[NotBlankValidation(), OnlyLetterValidation(), MaxLengthValidation(50)])
         )
 
@@ -37,7 +37,6 @@ class TravellerForm(Form):
             prompt_text="Achternaam",
             memory_key="last_name",
             value=existing.last_name if existing else None,
-            # TODO Allow names like Björk
             validations=[NotBlankValidation(), OnlyLetterValidation(), MaxLengthValidation(50)])
         )
 
@@ -67,17 +66,17 @@ class TravellerForm(Form):
         )
 
         ui.add(UserInterfacePrompt(
-            prompt_text="Telefoon nummer (+31-6-NNNNNNNN) +31-6-",
+            prompt_text="Telefoon nummer (+31-6-DDDDDDDD) +31-6-",
             memory_key="phone_number",
             value=existing.phone_number if existing else None,
             validations=[NotBlankValidation(), OnlyNumberValidation(), LengthValidation(8)])
         )
 
         ui.add(UserInterfacePrompt(
-            prompt_text="Rijbewijs nummer", # Format
+            prompt_text="Rijbewijs nummer (XXDDDDDDD of XDDDDDDDD, waarbij X een letter is en D een cijfer)",
             memory_key="driving_license_number",
             value=existing.driving_license_number if existing else None,
-            validations=[NotBlankValidation(), OnlyNumberValidation(), LengthValidation(8)]) # TODO Check requirements for driving license number
+            validations=[NotBlankValidation(), DriverLicenseValidation()])
         )
 
         ui.add(UserInterfaceAlert(text="==============", color=Color.WHITE))

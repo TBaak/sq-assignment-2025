@@ -193,3 +193,9 @@ class MenuController:
 
         if AuthorizationService.current_user_has_permission(Permission.UserUpdateOwnPassword):
             self.menu_choices.append(MenuOption("Wachtwoord wijzigingen", uc.reset_own_password))
+
+        if AuthorizationService.current_user_has_permission(Permission.UserSystemAdminUpdateSelf):
+            self.menu_choices.append(MenuOption("Account wijzigen", uc.update_own_system_admin_user))
+
+        if AuthorizationService.current_user_has_permission(Permission.UserSystemAdminDeleteSelf):
+            self.menu_choices.append(MenuOption("Account verwijderen", uc.delete_own_system_admin_user))

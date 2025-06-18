@@ -28,7 +28,7 @@ class TravellerRepository:
         for travellerData in result:
             traveller = Traveller(is_encrypted=True)
             traveller.populate(travellerData, ['id', 'first_name', 'last_name', 'street_name', 'dob',  'gender',
-                                         'house_number', 'city', 'zip_code', 'email_address', 'phone_number', 'number', 'driving_license_number'])
+                                         'house_number', 'city', 'zip_code', 'email_address', 'phone_number', 'driving_license_number'])
             traveller.decrypt()
             travellers.append(traveller)
 
@@ -53,8 +53,6 @@ class TravellerRepository:
         db = DBRepository.create_connection()
         cursor = db.cursor()
 
-        traveller.number = TravellerRepository.generate_traveller_number()
-
         traveller.encrypt()
 
         cursor.execute(
@@ -69,7 +67,6 @@ class TravellerRepository:
             "zip_code,"
             "email_address,"
             "phone_number,"
-            "number,"
             "driving_license_number"
             ") VALUES ("
             ":first_name,"
@@ -82,7 +79,6 @@ class TravellerRepository:
             ":zip_code,"
             ":email_address,"
             ":phone_number,"
-            ":number,"
             ":driving_license_number"
             ");",
             traveller.serialize()
@@ -141,16 +137,3 @@ class TravellerRepository:
 
         cursor.close()
         db.close()
-
-    @staticmethod
-    def generate_traveller_number():
-        # TODO: Check requirements
-        year_last_two_digits = str(datetime.now().year)[2:]
-
-        random_number = str(random.randint(1000000, 9999999))
-
-        numbers = (year_last_two_digits + random_number)
-
-        check_digit = sum(map(lambda x: int(x), [*numbers])) % 10
-
-        return numbers + str(check_digit)

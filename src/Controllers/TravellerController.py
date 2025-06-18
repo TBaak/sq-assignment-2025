@@ -31,7 +31,7 @@ class TravellerController:
         if travellers is None:
             travellers = TravellerRepository.find_all()
 
-        rows = map(lambda m: [m.number, m.first_name, m.last_name, m.driving_license_number, m.email_address,
+        rows = map(lambda m: [m.first_name, m.last_name, m.driving_license_number, m.email_address,
                               m.street_name + " " + m.house_number], travellers)
         rows = list(rows)
 
@@ -41,7 +41,7 @@ class TravellerController:
         rows = list(map(lambda m_row: UserInterfaceTableRow(m_row), rows))
 
         rows.insert(0, UserInterfaceTableRow(
-            ["#", "Traveller nummer", "Voornaam", "Achternaam", "Rijbewijs nummer", "E-mailadres", "Adres"]))
+            ["#", "Voornaam", "Achternaam", "Rijbewijs nummer", "E-mailadres", "Adres"]))
 
         ui = UserInterfaceFlow()
         ui.add(UserInterfaceAlert("Traveller overzicht" if travellers is None else "Zoekresultaten", Color.HEADER))
@@ -109,7 +109,6 @@ class TravellerController:
         LogRepository.log(LogType.TravellerRead)
 
         rows = [
-            UserInterfaceTableRow(["Nummer", traveller.number]),
             UserInterfaceTableRow(["Voornaam", traveller.first_name]),
             UserInterfaceTableRow(["Achternaam", traveller.last_name]),
             UserInterfaceTableRow(["Geboorte datum", traveller.dob]),

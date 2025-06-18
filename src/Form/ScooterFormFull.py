@@ -35,7 +35,6 @@ class ScooterFormFull(Form):
             prompt_text="Merk",
             memory_key="brand",
             value=existing.brand if existing else None,
-            # TODO Allow names like Björk
             validations=[NotBlankValidation(), OnlyLetterValidation(), MaxLengthValidation(50)])
         )
 
@@ -43,8 +42,7 @@ class ScooterFormFull(Form):
             prompt_text="Model",
             memory_key="model",
             value=existing.model if existing else None,
-            # TODO Allow names like Björk
-            validations=[NotBlankValidation(), OnlyLetterValidation(), MaxLengthValidation(50)])
+            validations=[NotBlankValidation(), AlphaNumericValidation(), MaxLengthValidation(50)])
         )
 
         ui.add(UserInterfacePrompt(

@@ -15,12 +15,8 @@ class Traveller(EncryptableModel, DatabaseModel, SerializeableModel):
         'zip_code',
         'email_address',
         'phone_number',
-        'number',
         'driving_license_number',
     ]
-
-    # Traveller number
-    number: str = None
 
     # Traveller information
     id: int = None

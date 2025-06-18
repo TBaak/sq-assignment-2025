@@ -31,7 +31,6 @@ class IndexService:
         IndexService.index[IndexDomain.USER_FIRSTNAME.value] = {}
         IndexService.index[IndexDomain.USER_LASTNAME.value] = {}
 
-        IndexService.index[IndexDomain.TRAVELLER_NUMBER.value] = {}
         IndexService.index[IndexDomain.TRAVELLER_FIRSTNAME.value] = {}
         IndexService.index[IndexDomain.TRAVELLER_LASTNAME.value] = {}
         IndexService.index[IndexDomain.TRAVELLER_ADDRESS.value] = {}
@@ -59,7 +58,6 @@ class IndexService:
     def find_traveller_by_query(query: str):
         results = []
 
-        results = IndexService.__search_domain(IndexDomain.TRAVELLER_NUMBER, query, results)
         results = IndexService.__search_domain(IndexDomain.TRAVELLER_FIRSTNAME, query, results)
         results = IndexService.__search_domain(IndexDomain.TRAVELLER_LASTNAME, query, results)
         results = IndexService.__search_domain(IndexDomain.TRAVELLER_ADDRESS, query, results)
@@ -149,7 +147,7 @@ class IndexService:
 
         cursor.execute("SELECT "
                        "id,"
-                       "number,"
+                       "first_name," # Keep this one here for legacy reasons
                        "first_name,"
                        "last_name,"
 
@@ -164,11 +162,6 @@ class IndexService:
         users = cursor.fetchall()
 
         for user in users:
-            IndexService.__add_to_index(
-                IndexDomain.TRAVELLER_NUMBER,
-                user[0],
-                EncryptionService.decrypt(user[1])
-            )
             IndexService.__add_to_index(
                 IndexDomain.TRAVELLER_FIRSTNAME,
                 user[0],

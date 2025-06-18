@@ -28,7 +28,7 @@ class Role(Enum):
         Permission.UserSystemAdminDelete.value,
         Permission.UserSystemAdminResetPassword.value,
 
-        # Permission.UserUpdateOwnPassword.value, Not possible because it is hardcodes
+        # Permission.UserUpdateOwnPassword.value, Not possible because it is hardcoded
 
         Permission.BackupCreate.value,
         Permission.BackupCreateOtc.value,
@@ -48,6 +48,9 @@ class Role(Enum):
         Permission.UserServiceEngineerUpdate.value,
         Permission.UserServiceEngineerDelete.value,
         Permission.UserServiceEngineerResetPassword.value,
+
+        Permission.UserSystemAdminUpdateSelf.value,
+        Permission.UserSystemAdminDeleteSelf.value,
 
         Permission.ScooterCreate.value,
         Permission.ScooterRead.value,
